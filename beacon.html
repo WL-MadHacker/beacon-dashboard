@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BEACON // Brenden Dearie</title>
+<meta name="description" content="Beacon: AI-Native Developer Talent Signal - Brenden Dearie">
+<meta property="og:title" content="BEACON // Brenden Dearie - AI-Native Developer">
+<meta property="og:description" content="18-36x velocity. 30K+ LOC. 160+ features. Solo operator. See the signal.">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --bg: #07070d;
+  --bg-card: #0d0d1a;
+  --border: #161636;
+  --border-glow: #252560;
+  --cyan: #00f0ff;
+  --magenta: #ff00aa;
+  --orange: #ff6b00;
+  --green: #00ff88;
+  --yellow: #ffdd00;
+  --purple: #8b5cf6;
+  --red: #ff3366;
+  --text: #e4e4ee;
+  --text2: #7777aa;
+  --text3: #444466;
+  --mono: 'JetBrains Mono', monospace;
+  --sans: 'Inter', sans-serif;
+}
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  overflow-x: hidden;
+}
+
+/* ===== CANVAS ===== */
+#bg-canvas {
+  position: fixed; top:0; left:0; width:100%; height:100%; z-index:0; pointer-events:none;
+}
+
+/* ===== BEACON CARD ===== */
+.beacon {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 680px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 0 80px rgba(0, 240, 255, 0.04), 0 20px 60px rgba(0,0,0,0.5);
+}
+
+.beacon::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--cyan), var(--magenta), var(--cyan));
+  background-size: 200% 100%;
+  animation: shimmer 3s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0%, 100% { background-position: 0% 0; }
+  50% { background-position: 200% 0; }
+}
+
+/* ===== HEADER ===== */
+.beacon-header {
+  padding: 2rem 2rem 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.beacon-id {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.beacon-dot {
+  width: 10px; height: 10px;
+  background: var(--green);
+  border-radius: 50%;
+  box-shadow: 0 0 10px var(--green);
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity:1; box-shadow: 0 0 10px var(--green); }
+  50% { opacity:0.5; box-shadow: 0 0 20px var(--green); }
+}
+
+.beacon-label {
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--cyan);
+  font-weight: 600;
+}
+
+.beacon-tag {
+  font-family: var(--mono);
+  font-size: 0.55rem;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--text3);
+  padding: 4px 10px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+}
+
+/* ===== IDENTITY ===== */
+.beacon-identity {
+  padding: 1.25rem 2rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.beacon-name {
+  font-size: 1.8rem;
+  font-weight: 900;
+  letter-spacing: -1px;
+  line-height: 1.1;
+  margin-bottom: 0.25rem;
+}
+
+.beacon-name span {
+  background: linear-gradient(135deg, var(--cyan), var(--magenta));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.beacon-role {
+  font-size: 0.8rem;
+  color: var(--text2);
+}
+
+/* ===== CORE METRICS ===== */
+.beacon-metrics {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  border-bottom: 1px solid var(--border);
+}
+
+.bm {
+  padding: 1.25rem 1rem;
+  text-align: center;
+  border-right: 1px solid var(--border);
+  transition: background 0.3s;
+}
+
+.bm:last-child { border-right: none; }
+.bm:hover { background: rgba(0, 240, 255, 0.02); }
+
+.bm-val {
+  font-family: var(--mono);
+  font-size: 1.5rem;
+  font-weight: 800;
+  line-height: 1;
+  margin-bottom: 0.2rem;
+}
+
+.bm-label {
+  font-family: var(--mono);
+  font-size: 0.5rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text2);
+}
+
+/* ===== VELOCITY BAR ===== */
+.beacon-velocity {
+  padding: 1.25rem 2rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.vel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.6rem;
+}
+
+.vel-label {
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text2);
+}
+
+.vel-val {
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  font-weight: 800;
+  color: var(--green);
+}
+
+.vel-bar-track {
+  width: 100%;
+  height: 10px;
+  background: rgba(255,255,255,0.03);
+  border-radius: 5px;
+  overflow: hidden;
+  position: relative;
+}
+
+.vel-bar-fill {
+  height: 100%;
+  border-radius: 5px;
+  background: linear-gradient(90deg, var(--green), var(--cyan));
+  transition: width 2s cubic-bezier(0.16, 1, 0.3, 1);
+  width: 0;
+  box-shadow: 0 0 12px rgba(0, 255, 136, 0.3);
+}
+
+.vel-bar-markers {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 4px;
+  font-family: var(--mono);
+  font-size: 0.5rem;
+  color: var(--text3);
+}
+
+/* ===== BCI RADAR ===== */
+.beacon-bci {
+  padding: 1.25rem 2rem;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.bci-radar-wrap {
+  width: 180px;
+  height: 180px;
+  flex-shrink: 0;
+}
+
+.bci-list {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.bci-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.bci-name {
+  font-family: var(--mono);
+  font-size: 0.55rem;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--text2);
+  width: 85px;
+  flex-shrink: 0;
+}
+
+.bci-track {
+  flex: 1;
+  height: 4px;
+  background: rgba(255,255,255,0.04);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.bci-fill {
+  height: 100%;
+  border-radius: 2px;
+  transition: width 1.5s cubic-bezier(0.16, 1, 0.3, 1);
+  width: 0;
+}
+
+.bci-score {
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  font-weight: 700;
+  width: 30px;
+  text-align: right;
+}
+
+/* ===== TRAJECTORY ===== */
+.beacon-trajectory {
+  padding: 1.25rem 2rem;
+  border-bottom: 1px solid var(--border);
+  display: grid;
+  grid-template-columns: 1fr auto 1fr auto 1fr;
+  gap: 0;
+  align-items: center;
+}
+
+.traj-comp {
+  text-align: center;
+  padding: 0.5rem;
+}
+
+.traj-comp h5 {
+  font-family: var(--mono);
+  font-size: 0.55rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  margin-bottom: 0.25rem;
+}
+
+.traj-comp p {
+  font-size: 0.6rem;
+  color: var(--text2);
+  line-height: 1.3;
+}
+
+.traj-comp .tstat {
+  display: inline-block;
+  margin-top: 0.3rem;
+  font-family: var(--mono);
+  font-size: 0.5rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 2px 8px;
+  border-radius: 3px;
+  border: 1px solid;
+}
+
+.traj-x {
+  font-family: var(--mono);
+  font-size: 1rem;
+  font-weight: 800;
+  color: var(--text3);
+  padding: 0 0.25rem;
+}
+
+/* ===== STACK ===== */
+.beacon-stack {
+  padding: 1rem 2rem;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.stk {
+  font-family: var(--mono);
+  font-size: 0.5rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+  color: var(--text2);
+  transition: all 0.3s;
+}
+
+.stk:hover {
+  border-color: var(--cyan);
+  color: var(--cyan);
+}
+
+/* ===== RARITY ===== */
+.beacon-rarity {
+  padding: 1.25rem 2rem;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.rarity-left {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.rarity-icon {
+  width: 36px; height: 36px;
+  border-radius: 8px;
+  background: rgba(139, 92, 246, 0.1);
+  border: 1px solid var(--purple);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+}
+
+.rarity-text h5 {
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: var(--purple);
+  letter-spacing: 1px;
+}
+
+.rarity-text p {
+  font-size: 0.6rem;
+  color: var(--text2);
+}
+
+.rarity-badge {
+  font-family: var(--mono);
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: var(--purple);
+}
+
+/* ===== FORMULA ===== */
+.beacon-formula {
+  padding: 1rem 2rem;
+  text-align: center;
+  border-bottom: 1px solid var(--border);
+}
+
+.formula {
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  color: var(--text3);
+}
+
+.formula .cc { color: var(--orange); font-weight: 700; }
+.formula .vt { color: var(--green); font-weight: 700; }
+.formula .et { color: var(--magenta); font-weight: 700; }
+.formula .rp { color: var(--cyan); font-weight: 700; }
+
+/* ===== FOOTER ===== */
+.beacon-footer {
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.bf-left {
+  font-family: var(--mono);
+  font-size: 0.5rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text3);
+}
+
+.bf-cta {
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--cyan);
+  text-decoration: none;
+  padding: 6px 16px;
+  border: 1px solid var(--cyan);
+  border-radius: 6px;
+  transition: all 0.3s;
+}
+
+.bf-cta:hover {
+  background: var(--cyan);
+  color: var(--bg);
+  box-shadow: 0 0 20px rgba(0, 240, 255, 0.3);
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 600px) {
+  body { padding: 0.5rem; }
+  .beacon { border-radius: 16px; }
+  .beacon-header, .beacon-identity, .beacon-velocity,
+  .beacon-bci, .beacon-stack, .beacon-rarity, .beacon-formula,
+  .beacon-footer { padding-left: 1.25rem; padding-right: 1.25rem; }
+  .beacon-name { font-size: 1.4rem; }
+  .bm-val { font-size: 1.2rem; }
+  .beacon-bci { flex-direction: column; }
+  .bci-radar-wrap { width: 160px; height: 160px; }
+  .beacon-trajectory { grid-template-columns: 1fr; gap: 0.25rem; }
+  .traj-x { display: none; }
+  .beacon-metrics { grid-template-columns: repeat(3, 1fr); }
+  .bm { padding: 1rem 0.5rem; }
+}
+</style>
+</head>
+<body>
+
+<canvas id="bg-canvas"></canvas>
+
+<div class="beacon">
+  <!-- HEADER -->
+  <div class="beacon-header">
+    <div class="beacon-id">
+      <div class="beacon-dot"></div>
+      <span class="beacon-label">Beacon Signal</span>
+    </div>
+    <span class="beacon-tag">March 2026</span>
+  </div>
+
+  <!-- IDENTITY -->
+  <div class="beacon-identity">
+    <div class="beacon-name">Brenden <span>Dearie</span></div>
+    <div class="beacon-role">AI-Native Developer &bull; Founder, WayLucid &bull; Phoenix, AZ</div>
+  </div>
+
+  <!-- CORE METRICS -->
+  <div class="beacon-metrics">
+    <div class="bm">
+      <div class="bm-val" style="color: var(--cyan);" id="c-loc">0</div>
+      <div class="bm-label">Lines of Code</div>
+    </div>
+    <div class="bm">
+      <div class="bm-val" style="color: var(--green);" id="c-feat">0</div>
+      <div class="bm-label">Features</div>
+    </div>
+    <div class="bm">
+      <div class="bm-val" style="color: var(--orange);">$1.4M</div>
+      <div class="bm-label">Equiv Value/yr</div>
+    </div>
+  </div>
+
+  <!-- VELOCITY BAR -->
+  <div class="beacon-velocity">
+    <div class="vel-header">
+      <span class="vel-label">Compound Velocity</span>
+      <span class="vel-val">18-36x</span>
+    </div>
+    <div class="vel-bar-track">
+      <div class="vel-bar-fill" id="vel-fill"></div>
+    </div>
+    <div class="vel-bar-markers">
+      <span>1x baseline</span>
+      <span>6x</span>
+      <span>12x</span>
+      <span>18x</span>
+      <span>24x</span>
+      <span>30x</span>
+      <span>36x</span>
+    </div>
+  </div>
+
+  <!-- BCI RADAR -->
+  <div class="beacon-bci">
+    <div class="bci-radar-wrap">
+      <canvas id="bciRadar"></canvas>
+    </div>
+    <div class="bci-list">
+      <div class="bci-row">
+        <span class="bci-name">Throughput</span>
+        <div class="bci-track"><div class="bci-fill" data-w="92" style="background:var(--cyan);"></div></div>
+        <span class="bci-score" style="color:var(--cyan);">92</span>
+      </div>
+      <div class="bci-row">
+        <span class="bci-name">Complexity</span>
+        <div class="bci-track"><div class="bci-fill" data-w="85" style="background:var(--green);"></div></div>
+        <span class="bci-score" style="color:var(--green);">85</span>
+      </div>
+      <div class="bci-row">
+        <span class="bci-name">Breadth</span>
+        <div class="bci-track"><div class="bci-fill" data-w="88" style="background:var(--orange);"></div></div>
+        <span class="bci-score" style="color:var(--orange);">88</span>
+      </div>
+      <div class="bci-row">
+        <span class="bci-name">Compression</span>
+        <div class="bci-track"><div class="bci-fill" data-w="94" style="background:var(--magenta);"></div></div>
+        <span class="bci-score" style="color:var(--magenta);">94</span>
+      </div>
+      <div class="bci-row">
+        <span class="bci-name">Error Rate</span>
+        <div class="bci-track"><div class="bci-fill" data-w="90" style="background:var(--yellow);"></div></div>
+        <span class="bci-score" style="color:var(--yellow);">90</span>
+      </div>
+      <div class="bci-row">
+        <span class="bci-name">Adaptation</span>
+        <div class="bci-track"><div class="bci-fill" data-w="87" style="background:var(--purple);"></div></div>
+        <span class="bci-score" style="color:var(--purple);">87</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- TRAJECTORY MODEL -->
+  <div class="beacon-trajectory">
+    <div class="traj-comp">
+      <h5 style="color:var(--orange);">Convergence</h5>
+      <p>4-link verified chain</p>
+      <span class="tstat" style="color:var(--orange);border-color:var(--orange);">Intact</span>
+    </div>
+    <div class="traj-x">&times;</div>
+    <div class="traj-comp">
+      <h5 style="color:var(--green);">Velocity</h5>
+      <p>18mo compound curve</p>
+      <span class="tstat" style="color:var(--green);border-color:var(--green);">Growing</span>
+    </div>
+    <div class="traj-x">&times;</div>
+    <div class="traj-comp">
+      <h5 style="color:var(--magenta);">Viability</h5>
+      <p>Seeking catalyst</p>
+      <span class="tstat" style="color:var(--magenta);border-color:var(--magenta);">Catalyst</span>
+    </div>
+  </div>
+
+  <!-- TECH STACK -->
+  <div class="beacon-stack">
+    <span class="stk">React</span>
+    <span class="stk">TypeScript</span>
+    <span class="stk">Vite</span>
+    <span class="stk">Drizzle ORM</span>
+    <span class="stk">PostgreSQL</span>
+    <span class="stk">Node.js</span>
+    <span class="stk">Python</span>
+    <span class="stk">Claude</span>
+    <span class="stk">GPT-4</span>
+    <span class="stk">Git</span>
+    <span class="stk">CI/CD</span>
+    <span class="stk">OAuth</span>
+    <span class="stk">Security</span>
+    <span class="stk">REST APIs</span>
+  </div>
+
+  <!-- RARITY -->
+  <div class="beacon-rarity">
+    <div class="rarity-left">
+      <div class="rarity-icon">&#x1F48E;</div>
+      <div class="rarity-text">
+        <h5>PROFILE RARITY</h5>
+        <p>7-domain skill intersection &bull; Tier 6 Classification</p>
+      </div>
+    </div>
+    <div class="rarity-badge">~1 in 1.6M</div>
+  </div>
+
+  <!-- FORMULA -->
+  <div class="beacon-formula">
+    <div class="formula">
+      <span class="rp">RP(t)</span> =
+      <span class="cc">CC</span> &times;
+      <span class="vt">V(t)</span> &times;
+      <span class="et">E(t)</span>
+      &nbsp;&mdash;&nbsp; The Trajectory Model
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="beacon-footer">
+    <span class="bf-left">WayLucid Labs &bull; 2026</span>
+    <a href="mailto:brenden@waylucid.com" class="bf-cta">Initiate Contact</a>
+  </div>
+</div>
+
+<script>
+// Particles
+(function(){
+  const c=document.getElementById('bg-canvas'),x=c.getContext('2d');let p=[],w,h;
+  function resize(){w=c.width=innerWidth;h=c.height=innerHeight}
+  function init(){p=[];const n=Math.min(50,Math.floor(w*h/20000));for(let i=0;i<n;i++)p.push({x:Math.random()*w,y:Math.random()*h,vx:(Math.random()-0.5)*0.2,vy:(Math.random()-0.5)*0.2,r:Math.random()*1.2+0.3,o:Math.random()*0.2+0.05})}
+  function draw(){x.clearRect(0,0,w,h);for(let i=0;i<p.length;i++){const a=p[i];a.x+=a.vx;a.y+=a.vy;if(a.x<0)a.x=w;if(a.x>w)a.x=0;if(a.y<0)a.y=h;if(a.y>h)a.y=0;x.beginPath();x.arc(a.x,a.y,a.r,0,Math.PI*2);x.fillStyle=`rgba(0,240,255,${a.o})`;x.fill();for(let j=i+1;j<p.length;j++){const b=p[j],dx=a.x-b.x,dy=a.y-b.y,d=Math.sqrt(dx*dx+dy*dy);if(d<120){x.beginPath();x.moveTo(a.x,a.y);x.lineTo(b.x,b.y);x.strokeStyle=`rgba(0,240,255,${0.04*(1-d/120)})`;x.lineWidth=0.4;x.stroke()}}}requestAnimationFrame(draw)}
+  addEventListener('resize',()=>{resize();init()});resize();init();draw()
+})();
+
+// Animated counters
+function animateVal(el, target, duration) {
+  const start = performance.now();
+  function update(now) {
+    const p = Math.min((now - start) / duration, 1);
+    const e = 1 - Math.pow(1 - p, 3);
+    el.textContent = Math.floor(e * target).toLocaleString() + (target > 1000 ? '+' : '+');
+    if (p < 1) requestAnimationFrame(update);
+  }
+  requestAnimationFrame(update);
+}
+
+// Trigger animations on load
+window.addEventListener('load', () => {
+  // Counters
+  setTimeout(() => {
+    animateVal(document.getElementById('c-loc'), 30367, 2000);
+    animateVal(document.getElementById('c-feat'), 160, 1800);
+  }, 400);
+
+  // Velocity bar
+  setTimeout(() => {
+    document.getElementById('vel-fill').style.width = '75%'; // 27x of 36x scale
+  }, 600);
+
+  // BCI bars
+  document.querySelectorAll('.bci-fill').forEach((el, i) => {
+    setTimeout(() => { el.style.width = el.dataset.w + '%'; }, 800 + i * 80);
+  });
+});
+
+// BCI Radar
+const ctx = document.getElementById('bciRadar');
+if (ctx) {
+  new Chart(ctx, {
+    type: 'radar',
+    data: {
+      labels: ['Throughput', 'Complexity', 'Breadth', 'Compression', 'Error Rate', 'Adaptation'],
+      datasets: [{
+        data: [0.92, 0.85, 0.88, 0.94, 0.90, 0.87],
+        borderColor: '#00f0ff',
+        backgroundColor: 'rgba(0,240,255,0.06)',
+        borderWidth: 2,
+        pointBackgroundColor: '#00f0ff',
+        pointRadius: 3,
+        pointHoverRadius: 5,
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: true,
+      scales: {
+        r: {
+          beginAtZero: true, max: 1,
+          ticks: { stepSize: 0.25, color: '#444466', backdropColor: 'transparent', font: { family: "'JetBrains Mono'", size: 8 } },
+          grid: { color: 'rgba(22,22,54,0.8)' },
+          angleLines: { color: 'rgba(22,22,54,0.8)' },
+          pointLabels: { color: '#7777aa', font: { family: "'JetBrains Mono'", size: 8, weight: '600' } }
+        }
+      },
+      plugins: { legend: { display: false } }
+    }
+  });
+}
+</script>
+</body>
+</html>

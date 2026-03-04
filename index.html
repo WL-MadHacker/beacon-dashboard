@@ -1,0 +1,2084 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BRENDEN DEARIE // Trajectory Dashboard</title>
+<meta name="description" content="AI-Native Developer Dashboard - Compound Velocity Tracking & Production Metrics">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg-primary: #0a0a0f;
+  --bg-secondary: #0f0f1a;
+  --bg-card: #111122;
+  --bg-card-hover: #161630;
+  --border: #1a1a3e;
+  --border-glow: #2a2a5e;
+  --cyan: #00f0ff;
+  --cyan-dim: #00a0aa;
+  --magenta: #ff00aa;
+  --orange: #ff6b00;
+  --green: #00ff88;
+  --yellow: #ffdd00;
+  --purple: #8b5cf6;
+  --red: #ff3366;
+  --text-primary: #e8e8f0;
+  --text-secondary: #8888aa;
+  --text-dim: #555577;
+  --font-mono: 'JetBrains Mono', monospace;
+  --font-sans: 'Inter', sans-serif;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+/* ===== CANVAS BACKGROUND ===== */
+#bg-canvas {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* ===== GLOBAL NAV ===== */
+.nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  background: rgba(10, 10, 15, 0.85);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  padding: 0 2rem;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.nav-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.nav-brand .status-dot {
+  width: 8px; height: 8px;
+  background: var(--green);
+  border-radius: 50%;
+  box-shadow: 0 0 8px var(--green);
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; box-shadow: 0 0 8px var(--green); }
+  50% { opacity: 0.5; box-shadow: 0 0 16px var(--green); }
+}
+
+.nav-brand h1 {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.nav-brand h1 span { color: var(--cyan); }
+
+.nav-links {
+  display: flex;
+  gap: 2rem;
+  list-style: none;
+}
+
+.nav-links a {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition: color 0.3s;
+  position: relative;
+}
+
+.nav-links a:hover, .nav-links a.active { color: var(--cyan); }
+
+.nav-links a.active::after {
+  content: '';
+  position: absolute;
+  bottom: -4px; left: 0; right: 0;
+  height: 2px;
+  background: var(--cyan);
+  box-shadow: 0 0 8px var(--cyan);
+}
+
+.nav-clock {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--orange);
+  font-weight: 600;
+}
+
+/* ===== MAIN LAYOUT ===== */
+main {
+  position: relative;
+  z-index: 1;
+  padding-top: 56px;
+}
+
+section {
+  padding: 3rem 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* ===== HERO SECTION ===== */
+.hero {
+  min-height: calc(100vh - 56px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  position: relative;
+}
+
+.hero-label {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--cyan);
+  margin-bottom: 1.5rem;
+  opacity: 0;
+  animation: fadeInUp 0.8s ease forwards 0.2s;
+}
+
+.hero h2 {
+  font-family: var(--font-sans);
+  font-size: clamp(2.5rem, 6vw, 5rem);
+  font-weight: 900;
+  line-height: 1.05;
+  letter-spacing: -2px;
+  margin-bottom: 1rem;
+  opacity: 0;
+  animation: fadeInUp 0.8s ease forwards 0.4s;
+}
+
+.hero h2 .gradient-text {
+  background: linear-gradient(135deg, var(--cyan), var(--magenta));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero-sub {
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+  max-width: 600px;
+  line-height: 1.6;
+  margin-bottom: 3rem;
+  opacity: 0;
+  animation: fadeInUp 0.8s ease forwards 0.6s;
+}
+
+.hero-formula {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: var(--text-dim);
+  padding: 1rem 2rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: rgba(17, 17, 34, 0.5);
+  margin-bottom: 3rem;
+  opacity: 0;
+  animation: fadeInUp 0.8s ease forwards 0.8s;
+}
+
+.hero-formula .var-cc { color: var(--orange); font-weight: 700; }
+.hero-formula .var-v { color: var(--green); font-weight: 700; }
+.hero-formula .var-e { color: var(--magenta); font-weight: 700; }
+.hero-formula .var-eq { color: var(--cyan); font-weight: 700; }
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ===== METRICS BAR ===== */
+.metrics-bar {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 1rem;
+  padding: 2rem;
+  opacity: 0;
+  animation: fadeInUp 0.8s ease forwards 1s;
+}
+
+.metric-hex {
+  position: relative;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.5rem 1rem;
+  text-align: center;
+  transition: all 0.3s ease;
+  overflow: hidden;
+}
+
+.metric-hex::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.metric-hex:hover {
+  border-color: var(--border-glow);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(0, 240, 255, 0.08);
+}
+
+.metric-hex:hover::before { opacity: 1; }
+
+.metric-value {
+  font-family: var(--font-mono);
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: var(--cyan);
+  line-height: 1;
+  margin-bottom: 0.25rem;
+}
+
+.metric-hex:nth-child(2) .metric-value { color: var(--green); }
+.metric-hex:nth-child(3) .metric-value { color: var(--orange); }
+.metric-hex:nth-child(4) .metric-value { color: var(--magenta); }
+.metric-hex:nth-child(5) .metric-value { color: var(--yellow); }
+.metric-hex:nth-child(6) .metric-value { color: var(--purple); }
+
+.metric-label {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+/* ===== SECTION HEADERS ===== */
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 2rem;
+}
+
+.section-icon {
+  width: 32px; height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  font-size: 1rem;
+}
+
+.section-header h3 {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--text-primary);
+}
+
+/* ===== GRID LAYOUTS ===== */
+.grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.grid-3 {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 1.5rem;
+}
+
+/* ===== CARDS ===== */
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+}
+
+.card:hover {
+  border-color: var(--border-glow);
+  box-shadow: 0 4px 24px rgba(0, 240, 255, 0.04);
+}
+
+/* ===== CONVERGENCE CHAIN ===== */
+.chain-container {
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+  overflow-x: auto;
+  padding-bottom: 1rem;
+}
+
+.chain-link {
+  flex: 1;
+  min-width: 200px;
+  position: relative;
+  padding: 1.5rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  text-align: center;
+  transition: all 0.4s ease;
+}
+
+.chain-link:hover {
+  border-color: var(--cyan);
+  box-shadow: 0 0 24px rgba(0, 240, 255, 0.1);
+  transform: translateY(-4px);
+}
+
+.chain-arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  flex-shrink: 0;
+  color: var(--cyan);
+  font-size: 1.2rem;
+  font-family: var(--font-mono);
+}
+
+.chain-link .chain-num {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: var(--cyan);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+}
+
+.chain-link h4 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  color: var(--text-primary);
+}
+
+.chain-link p {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.chain-link .chain-tag {
+  display: inline-block;
+  margin-top: 0.75rem;
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: 4px;
+  border: 1px solid;
+}
+
+.chain-link:nth-child(1) .chain-tag { color: var(--orange); border-color: var(--orange); }
+.chain-link:nth-child(3) .chain-tag { color: var(--purple); border-color: var(--purple); }
+.chain-link:nth-child(5) .chain-tag { color: var(--green); border-color: var(--green); }
+.chain-link:nth-child(7) .chain-tag { color: var(--cyan); border-color: var(--cyan); }
+.chain-link:nth-child(9) .chain-tag { color: var(--magenta); border-color: var(--magenta); }
+
+/* ===== BCI RADAR ===== */
+.bci-container {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.bci-chart-wrap {
+  flex: 1;
+  max-width: 400px;
+  aspect-ratio: 1;
+}
+
+.bci-signals {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.bci-signal {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.bci-signal-name {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  width: 120px;
+  flex-shrink: 0;
+}
+
+.bci-bar-track {
+  flex: 1;
+  height: 6px;
+  background: var(--bg-primary);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.bci-bar-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 1.5s ease;
+  width: 0;
+}
+
+.bci-signal-val {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 700;
+  width: 40px;
+  text-align: right;
+}
+
+/* ===== VELOCITY CHART ===== */
+.velocity-chart-wrap {
+  width: 100%;
+  height: 300px;
+  position: relative;
+}
+
+/* ===== SKILL DOMAINS ===== */
+.skill-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+}
+
+.skill-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.25rem;
+  text-align: center;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.skill-card::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 2px;
+  transition: opacity 0.3s;
+  opacity: 0;
+}
+
+.skill-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--border-glow);
+}
+
+.skill-card:hover::after { opacity: 1; }
+
+.skill-card:nth-child(1)::after { background: var(--cyan); }
+.skill-card:nth-child(2)::after { background: var(--green); }
+.skill-card:nth-child(3)::after { background: var(--orange); }
+.skill-card:nth-child(4)::after { background: var(--magenta); }
+.skill-card:nth-child(5)::after { background: var(--yellow); }
+.skill-card:nth-child(6)::after { background: var(--purple); }
+.skill-card:nth-child(7)::after { background: var(--red); }
+
+.skill-icon {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.skill-card h4 {
+  font-size: 0.8rem;
+  font-weight: 700;
+  margin-bottom: 0.25rem;
+}
+
+.skill-card p {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: var(--text-secondary);
+}
+
+/* ===== PRODUCTION EVIDENCE TABLE ===== */
+.evidence-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+
+.evidence-table th {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  text-align: left;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.evidence-table td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid rgba(26, 26, 62, 0.5);
+  color: var(--text-primary);
+}
+
+.evidence-table td:nth-child(2) {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  color: var(--cyan);
+}
+
+.evidence-table tr:hover td {
+  background: rgba(0, 240, 255, 0.02);
+}
+
+/* ===== TCR TABLE ===== */
+.tcr-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.tcr-item {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.25rem;
+  transition: all 0.3s;
+}
+
+.tcr-item:hover {
+  border-color: var(--border-glow);
+  transform: translateY(-2px);
+}
+
+.tcr-item h5 {
+  font-size: 0.8rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: var(--text-primary);
+}
+
+.tcr-item .tcr-val {
+  font-family: var(--font-mono);
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--green);
+  margin-bottom: 0.25rem;
+}
+
+.tcr-item .tcr-detail {
+  font-size: 0.7rem;
+  color: var(--text-secondary);
+}
+
+/* ===== STACK PILLS ===== */
+.stack-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.stack-pill {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 6px 14px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: rgba(17, 17, 34, 0.6);
+  color: var(--text-secondary);
+  transition: all 0.3s;
+}
+
+.stack-pill:hover {
+  border-color: var(--cyan);
+  color: var(--cyan);
+  box-shadow: 0 0 12px rgba(0, 240, 255, 0.1);
+}
+
+/* ===== TRAJECTORY MODEL VIS ===== */
+.trajectory-vis {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr auto 1fr;
+  gap: 0;
+  align-items: stretch;
+  margin-top: 1rem;
+}
+
+.trajectory-component {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 2rem 1.5rem;
+  text-align: center;
+  transition: all 0.4s ease;
+  position: relative;
+}
+
+.trajectory-component:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.trajectory-component:nth-child(1) { border-top: 3px solid var(--orange); }
+.trajectory-component:nth-child(3) { border-top: 3px solid var(--green); }
+.trajectory-component:nth-child(5) { border-top: 3px solid var(--magenta); }
+
+.trajectory-component h4 {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  margin-bottom: 0.5rem;
+}
+
+.trajectory-component:nth-child(1) h4 { color: var(--orange); }
+.trajectory-component:nth-child(3) h4 { color: var(--green); }
+.trajectory-component:nth-child(5) h4 { color: var(--magenta); }
+
+.trajectory-component .desc {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  margin-bottom: 0.75rem;
+}
+
+.trajectory-component .status-tag {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: 4px;
+  display: inline-block;
+}
+
+.trajectory-mul {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--text-dim);
+  width: 50px;
+}
+
+/* ===== CTA / FOOTER ===== */
+.cta-section {
+  text-align: center;
+  padding: 6rem 2rem;
+}
+
+.cta-section h3 {
+  font-size: clamp(1.5rem, 3vw, 2.5rem);
+  font-weight: 800;
+  margin-bottom: 1rem;
+}
+
+.cta-section p {
+  color: var(--text-secondary);
+  max-width: 500px;
+  margin: 0 auto 2rem;
+  line-height: 1.6;
+}
+
+.cta-btn {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 14px 40px;
+  border: 2px solid var(--cyan);
+  color: var(--cyan);
+  background: transparent;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: all 0.3s;
+  cursor: pointer;
+}
+
+.cta-btn:hover {
+  background: var(--cyan);
+  color: var(--bg-primary);
+  box-shadow: 0 0 32px rgba(0, 240, 255, 0.3);
+}
+
+.footer {
+  border-top: 1px solid var(--border);
+  padding: 2rem;
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: var(--text-dim);
+  letter-spacing: 1px;
+}
+
+/* ===== SCROLL ANIMATIONS ===== */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.8s ease;
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ===== RARITY BADGE ===== */
+.rarity-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(139, 92, 246, 0.1);
+  border: 1px solid var(--purple);
+  border-radius: 8px;
+  padding: 8px 16px;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--purple);
+  font-weight: 600;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 1024px) {
+  .grid-2, .grid-3 { grid-template-columns: 1fr; }
+  .trajectory-vis {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
+  .trajectory-mul {
+    width: auto;
+    height: 40px;
+    font-size: 1.2rem;
+  }
+  .bci-container { flex-direction: column; }
+  .bci-chart-wrap { max-width: 300px; margin: 0 auto; }
+}
+
+@media (max-width: 768px) {
+  .nav-links { display: none; }
+  section { padding: 2rem 1rem; }
+  .metrics-bar { grid-template-columns: repeat(3, 1fr); gap: 0.5rem; }
+  .metric-hex { padding: 1rem 0.5rem; }
+  .metric-value { font-size: 1.3rem; }
+  .chain-container { flex-direction: column; }
+  .chain-arrow { width: auto; height: 30px; transform: rotate(90deg); }
+  .hero h2 { letter-spacing: -1px; }
+  .hero-formula { font-size: 0.7rem; padding: 0.75rem 1rem; }
+}
+
+@media (max-width: 480px) {
+  .metrics-bar { grid-template-columns: repeat(2, 1fr); }
+  .skill-grid { grid-template-columns: repeat(2, 1fr); }
+  .tcr-grid { grid-template-columns: 1fr; }
+}
+
+/* ===== SENTIENCE METER ===== */
+.sentience-hero {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.sentience-composite {
+  font-family: var(--font-mono);
+  font-size: 4rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #ff3333 0%, #ff8800 30%, #00ff88 60%, #00ff88 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1;
+  margin-bottom: 0.25rem;
+}
+
+.sentience-label {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+.sentience-bar-outer {
+  width: 100%;
+  height: 16px;
+  background: var(--bg-primary);
+  border-radius: 8px;
+  overflow: hidden;
+  margin: 1.5rem 0 0.5rem;
+  position: relative;
+}
+
+.sentience-bar-fill {
+  height: 100%;
+  border-radius: 8px;
+  background: linear-gradient(90deg, #661111 0%, #ff3333 15%, #ff8800 35%, #ffdd00 50%, #00ff88 70%, #00ff88 100%);
+  transition: width 2s cubic-bezier(0.16, 1, 0.3, 1);
+  width: 0;
+  position: relative;
+}
+
+.sentience-bar-fill::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: -2px;
+  width: 3px;
+  height: 20px;
+  background: white;
+  box-shadow: 0 0 10px var(--green), 0 0 20px var(--green);
+  border-radius: 2px;
+}
+
+.sentience-bar-labels {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--font-mono);
+  font-size: 0.55rem;
+  color: var(--text-dim);
+  letter-spacing: 1px;
+}
+
+.benchmark-categories {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.bench-cat {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1rem 1.25rem;
+  transition: all 0.3s;
+}
+
+.bench-cat:hover {
+  border-color: var(--border-glow);
+  transform: translateY(-2px);
+}
+
+.bench-cat-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.bench-cat-name {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
+
+.bench-cat-weight {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  color: var(--text-dim);
+}
+
+.bench-cat-bar {
+  width: 100%;
+  height: 8px;
+  background: var(--bg-primary);
+  border-radius: 4px;
+  overflow: visible;
+  position: relative;
+  margin-bottom: 0.5rem;
+}
+
+.bench-cat-fill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 1.8s cubic-bezier(0.16, 1, 0.3, 1);
+  width: 0;
+}
+
+.bench-cat-ceiling {
+  position: absolute;
+  top: -4px;
+  width: 2px;
+  height: 16px;
+  background: var(--text-dim);
+  border-radius: 1px;
+}
+
+.bench-cat-ceiling::after {
+  content: 'FRONTIER';
+  position: absolute;
+  top: -14px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--font-mono);
+  font-size: 0.45rem;
+  letter-spacing: 1px;
+  color: var(--text-dim);
+  white-space: nowrap;
+}
+
+.bench-cat-scores {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+}
+
+.bench-cat-scores .wm-score { color: var(--green); font-weight: 700; }
+.bench-cat-scores .frontier-score { color: var(--text-dim); }
+
+.frontier-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 2rem;
+  font-size: 0.8rem;
+}
+
+.frontier-table th {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  padding: 0.6rem 0.5rem;
+  text-align: center;
+  border-bottom: 1px solid var(--border);
+}
+
+.frontier-table th:first-child { text-align: left; }
+
+.frontier-table td {
+  padding: 0.6rem 0.5rem;
+  text-align: center;
+  border-bottom: 1px solid rgba(26, 26, 62, 0.4);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+}
+
+.frontier-table td:first-child {
+  text-align: left;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.frontier-table tr:hover td { background: rgba(0, 240, 255, 0.02); }
+
+.frontier-table .wm-row td {
+  color: var(--green);
+  font-weight: 700;
+  background: rgba(0, 255, 136, 0.03);
+}
+
+.frontier-table .wm-row td:first-child { color: var(--green); }
+
+.frontier-table .best-cell {
+  color: var(--yellow) !important;
+  font-weight: 800;
+}
+
+.wm-advantages {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+}
+
+.wm-adv {
+  background: rgba(0, 255, 136, 0.04);
+  border: 1px solid rgba(0, 255, 136, 0.15);
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+.wm-adv strong {
+  color: var(--green);
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: 0.25rem;
+}
+
+/* ===== ANIMATED COUNTERS ===== */
+.counter { display: inline-block; }
+
+/* ===== GLOW LINE ===== */
+.glow-line {
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+  opacity: 0.3;
+  margin: 1rem 0;
+}
+
+/* ===== WINDOW INDICATOR ===== */
+.window-indicator {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  background: rgba(0, 255, 136, 0.05);
+  border: 1px solid rgba(0, 255, 136, 0.2);
+  border-radius: 8px;
+  margin-top: 1rem;
+}
+
+.window-indicator .wi-label {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--green);
+  font-weight: 600;
+}
+
+.window-bar {
+  flex: 1;
+  height: 8px;
+  background: var(--bg-primary);
+  border-radius: 4px;
+  overflow: hidden;
+  position: relative;
+}
+
+.window-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--green), var(--yellow));
+  border-radius: 4px;
+  width: 60%;
+  position: relative;
+}
+
+.window-bar-marker {
+  position: absolute;
+  right: -1px;
+  top: -4px;
+  width: 2px;
+  height: 16px;
+  background: var(--cyan);
+  box-shadow: 0 0 8px var(--cyan);
+}
+
+.window-range {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  color: var(--text-dim);
+  display: flex;
+  justify-content: space-between;
+  margin-top: 4px;
+}
+</style>
+</head>
+<body>
+
+<canvas id="bg-canvas"></canvas>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-brand">
+    <div class="status-dot"></div>
+    <h1>BRENDEN <span>DEARIE</span></h1>
+  </div>
+  <ul class="nav-links">
+    <li><a href="#command" class="active">Command</a></li>
+    <li><a href="#velocity">Velocity</a></li>
+    <li><a href="#convergence">Chain</a></li>
+    <li><a href="#bci">BCI</a></li>
+    <li><a href="#production">Output</a></li>
+    <li><a href="#wintermute">Wintermute</a></li>
+  </ul>
+  <div class="nav-clock" id="clock"></div>
+</nav>
+
+<main>
+
+<!-- HERO -->
+<section class="hero" id="command">
+  <div class="hero-label">AI-Native Developer &bull; Founder, WayLucid &bull; Phoenix, AZ</div>
+  <h2>
+    Building at<br>
+    <span class="gradient-text">Escape Velocity</span>
+  </h2>
+  <p class="hero-sub">
+    Solo AI-augmented developer producing 18-36x traditional output velocity.
+    30,000+ LOC production systems. 160+ features. One operator.
+  </p>
+  <div class="hero-formula">
+    <span class="var-eq">RP(t)</span> =
+    <span class="var-cc">CC</span> &times;
+    <span class="var-v">V(t)</span> &times;
+    <span class="var-e">E(t)</span>
+    &nbsp;&nbsp;&mdash;&nbsp;&nbsp;
+    <span style="color: var(--text-dim)">The Trajectory Model</span>
+  </div>
+  <div class="rarity-badge">
+    Profile Rarity: ~1 in 1.6M &bull; Tier 6 Classification
+  </div>
+
+  <!-- METRICS BAR -->
+  <div class="metrics-bar">
+    <div class="metric-hex">
+      <div class="metric-value"><span class="counter" data-target="30367">0</span>+</div>
+      <div class="metric-label">Lines of Code</div>
+    </div>
+    <div class="metric-hex">
+      <div class="metric-value"><span class="counter" data-target="160">0</span>+</div>
+      <div class="metric-label">Features</div>
+    </div>
+    <div class="metric-hex">
+      <div class="metric-value"><span class="counter" data-target="18">0</span>-36x</div>
+      <div class="metric-label">Velocity</div>
+    </div>
+    <div class="metric-hex">
+      <div class="metric-value"><span class="counter" data-target="141">0</span></div>
+      <div class="metric-label">Tests Passing</div>
+    </div>
+    <div class="metric-hex">
+      <div class="metric-value">98.8<span style="font-size:0.8em">%</span></div>
+      <div class="metric-label">Completion</div>
+    </div>
+    <div class="metric-hex">
+      <div class="metric-value">$1.4<span style="font-size:0.8em">M</span></div>
+      <div class="metric-label">Equiv Value/yr</div>
+    </div>
+  </div>
+</section>
+
+<!-- TRAJECTORY MODEL -->
+<section id="trajectory" class="reveal">
+  <div class="section-header">
+    <h3>The Trajectory Model</h3>
+  </div>
+  <div class="trajectory-vis">
+    <div class="trajectory-component">
+      <h4>Convergence Chain</h4>
+      <div class="desc">Irreproducible sequence of formative inputs. Historical. Fixed. 4 verified links.</div>
+      <span class="status-tag" style="background: rgba(255,107,0,0.1); color: var(--orange); border: 1px solid var(--orange);">Intact</span>
+    </div>
+    <div class="trajectory-mul">&times;</div>
+    <div class="trajectory-component">
+      <h4>Compound Velocity</h4>
+      <div class="desc">Exponentially accelerating output. 18+ months of compound AI-native practice.</div>
+      <span class="status-tag" style="background: rgba(0,255,136,0.1); color: var(--green); border: 1px solid var(--green);">Growing</span>
+    </div>
+    <div class="trajectory-mul">&times;</div>
+    <div class="trajectory-component">
+      <h4>Environmental Viability</h4>
+      <div class="desc">Resource state enabling continued production. Currently the binding constraint.</div>
+      <span class="status-tag" style="background: rgba(255,0,170,0.1); color: var(--magenta); border: 1px solid var(--magenta);">Seeking Catalyst</span>
+    </div>
+  </div>
+
+  <div class="window-indicator" style="margin-top: 2rem;">
+    <div class="wi-label">Escape Window</div>
+    <div style="flex:1">
+      <div class="window-bar">
+        <div class="window-bar-fill">
+          <div class="window-bar-marker"></div>
+        </div>
+      </div>
+      <div class="window-range">
+        <span>2023</span>
+        <span style="color: var(--cyan);">NOW (18mo in)</span>
+        <span>2027</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONVERGENCE CHAIN -->
+<section id="convergence" class="reveal">
+  <div class="section-header">
+    <h3>Convergence Chain</h3>
+  </div>
+  <div class="chain-container">
+    <div class="chain-link">
+      <div class="chain-num">Link 01</div>
+      <h4>Chain-Reaction Cognition</h4>
+      <p>Rube Goldberg machines: pipeline architecture thinking. Sequential processing with heterogeneous interfaces.</p>
+      <span class="chain-tag">Formation</span>
+    </div>
+    <div class="chain-arrow">&rarr;</div>
+    <div class="chain-link">
+      <div class="chain-num">Link 02</div>
+      <h4>Strategic Systems</h4>
+      <p>StarCraft: Brood War. Multi-threaded execution, macro/micro optimization, fog-of-war decisions at 200+ APM.</p>
+      <span class="chain-tag">Skill Build</span>
+    </div>
+    <div class="chain-arrow">&rarr;</div>
+    <div class="chain-link">
+      <div class="chain-num">Link 03</div>
+      <h4>Pattern Recognition</h4>
+      <p>Web3 early adoption. BTC ~$300, ETH ~$140. Validated paradigm recognition before mainstream consensus.</p>
+      <span class="chain-tag">Validated</span>
+    </div>
+    <div class="chain-arrow">&rarr;</div>
+    <div class="chain-link">
+      <div class="chain-num">Link 04</div>
+      <h4>AI-Native Dev</h4>
+      <p>Entered paradigm at inflection. 18+ months compound practice orchestrating multi-model production systems.</p>
+      <span class="chain-tag">Active</span>
+    </div>
+    <div class="chain-arrow">&rarr;</div>
+    <div class="chain-link">
+      <div class="chain-num">Output</div>
+      <h4>WayLucid Built</h4>
+      <p>30K+ LOC production CRM. 160+ features. Solo AI-augmented. 18-36x velocity multiplier demonstrated.</p>
+      <span class="chain-tag">Verified</span>
+    </div>
+  </div>
+</section>
+
+<!-- BCI + VELOCITY -->
+<section class="reveal">
+  <div class="grid-2">
+    <!-- BCI RADAR -->
+    <div class="card" id="bci">
+      <div class="section-header">
+        <h3>Behavioral Cognitive Index</h3>
+      </div>
+      <div class="bci-container">
+        <div class="bci-chart-wrap">
+          <canvas id="bciChart"></canvas>
+        </div>
+        <div class="bci-signals">
+          <div class="bci-signal">
+            <span class="bci-signal-name">Throughput</span>
+            <div class="bci-bar-track"><div class="bci-bar-fill" data-width="92" style="background: var(--cyan);"></div></div>
+            <span class="bci-signal-val" style="color: var(--cyan);">0.92</span>
+          </div>
+          <div class="bci-signal">
+            <span class="bci-signal-name">Complexity</span>
+            <div class="bci-bar-track"><div class="bci-bar-fill" data-width="85" style="background: var(--green);"></div></div>
+            <span class="bci-signal-val" style="color: var(--green);">0.85</span>
+          </div>
+          <div class="bci-signal">
+            <span class="bci-signal-name">Breadth</span>
+            <div class="bci-bar-track"><div class="bci-bar-fill" data-width="88" style="background: var(--orange);"></div></div>
+            <span class="bci-signal-val" style="color: var(--orange);">0.88</span>
+          </div>
+          <div class="bci-signal">
+            <span class="bci-signal-name">Compression</span>
+            <div class="bci-bar-track"><div class="bci-bar-fill" data-width="94" style="background: var(--magenta);"></div></div>
+            <span class="bci-signal-val" style="color: var(--magenta);">0.94</span>
+          </div>
+          <div class="bci-signal">
+            <span class="bci-signal-name">Error Rate</span>
+            <div class="bci-bar-track"><div class="bci-bar-fill" data-width="90" style="background: var(--yellow);"></div></div>
+            <span class="bci-signal-val" style="color: var(--yellow);">0.90</span>
+          </div>
+          <div class="bci-signal">
+            <span class="bci-signal-name">Adaptation</span>
+            <div class="bci-bar-track"><div class="bci-bar-fill" data-width="87" style="background: var(--purple);"></div></div>
+            <span class="bci-signal-val" style="color: var(--purple);">0.87</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- VELOCITY CHART -->
+    <div class="card" id="velocity">
+      <div class="section-header">
+        <h3>Compound Velocity Curve</h3>
+      </div>
+      <div class="velocity-chart-wrap">
+        <canvas id="velocityChart"></canvas>
+      </div>
+      <div class="window-indicator">
+        <div class="wi-label" style="font-size: 0.6rem;">Compounding</div>
+        <div style="font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-secondary);">
+          Early Adopter advantage widens exponentially. Gap is now insurmountable.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TIME COMPRESSION RATIOS -->
+<section id="production" class="reveal">
+  <div class="section-header">
+    <h3>Time Compression Ratios</h3>
+  </div>
+  <div class="tcr-grid">
+    <div class="tcr-item">
+      <h5>CRM Core</h5>
+      <div class="tcr-val">4-6x</div>
+      <div class="tcr-detail">3-4 months / 2-3 devs &rarr; ~3 weeks solo</div>
+    </div>
+    <div class="tcr-item">
+      <h5>Financial Engine</h5>
+      <div class="tcr-val">6-8x</div>
+      <div class="tcr-detail">2-3 months / 1-2 devs &rarr; ~2 weeks solo</div>
+    </div>
+    <div class="tcr-item">
+      <h5>Email Integration</h5>
+      <div class="tcr-val">6-8x</div>
+      <div class="tcr-detail">1-2 months / 1 dev &rarr; ~1 week solo</div>
+    </div>
+    <div class="tcr-item">
+      <h5>Security Hardening</h5>
+      <div class="tcr-val">6-10x</div>
+      <div class="tcr-detail">1-2 months / specialist &rarr; ~1 week solo</div>
+    </div>
+    <div class="tcr-item">
+      <h5>OCR Scanner</h5>
+      <div class="tcr-val">5-8x</div>
+      <div class="tcr-detail">2-4 weeks / 1 dev &rarr; ~3 days solo</div>
+    </div>
+    <div class="tcr-item">
+      <h5>Pitch Deck Gen</h5>
+      <div class="tcr-val">5-7x</div>
+      <div class="tcr-detail">3-4 weeks / 1 dev &rarr; ~4 days solo</div>
+    </div>
+  </div>
+</section>
+
+<!-- SKILL DOMAINS -->
+<section class="reveal">
+  <div class="section-header">
+    <h3>Skill Domain Stack</h3>
+  </div>
+  <div class="skill-grid">
+    <div class="skill-card">
+      <div class="skill-icon">&#x1F9E0;</div>
+      <h4>AI-Native Development</h4>
+      <p>Multi-model orchestration</p>
+    </div>
+    <div class="skill-card">
+      <div class="skill-icon">&#x1F4BB;</div>
+      <h4>Full-Stack Engineering</h4>
+      <p>React + TypeScript + Node</p>
+    </div>
+    <div class="skill-card">
+      <div class="skill-icon">&#x1F4C8;</div>
+      <h4>Business Strategy</h4>
+      <p>Sales + market analysis</p>
+    </div>
+    <div class="skill-card">
+      <div class="skill-icon">&#x1F4B0;</div>
+      <h4>Financial Analysis</h4>
+      <p>Metrics + modeling</p>
+    </div>
+    <div class="skill-card">
+      <div class="skill-icon">&#x270D;&#xFE0F;</div>
+      <h4>Content Creation</h4>
+      <p>Research + writing</p>
+    </div>
+    <div class="skill-card">
+      <div class="skill-icon">&#x1F680;</div>
+      <h4>Founder Execution</h4>
+      <p>0-to-1 product builder</p>
+    </div>
+    <div class="skill-card">
+      <div class="skill-icon">&#x26A1;</div>
+      <h4>3SD+ Cognitive</h4>
+      <p>145+ verified capacity</p>
+    </div>
+  </div>
+
+  <div class="stack-pills">
+    <span class="stack-pill">React</span>
+    <span class="stack-pill">TypeScript</span>
+    <span class="stack-pill">Vite</span>
+    <span class="stack-pill">Drizzle ORM</span>
+    <span class="stack-pill">PostgreSQL</span>
+    <span class="stack-pill">Node.js</span>
+    <span class="stack-pill">Python</span>
+    <span class="stack-pill">Tailwind</span>
+    <span class="stack-pill">Claude</span>
+    <span class="stack-pill">GPT-4</span>
+    <span class="stack-pill">Cursor</span>
+    <span class="stack-pill">Git</span>
+    <span class="stack-pill">CI/CD</span>
+    <span class="stack-pill">Security Audit</span>
+    <span class="stack-pill">REST APIs</span>
+    <span class="stack-pill">OAuth</span>
+  </div>
+</section>
+
+<!-- PRODUCTION EVIDENCE -->
+<section class="reveal">
+  <div class="section-header">
+    <h3>Production Evidence</h3>
+  </div>
+  <div class="card">
+    <table class="evidence-table">
+      <thead>
+        <tr>
+          <th>Metric</th>
+          <th>Value</th>
+          <th>Verification</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Total Lines of Code</td><td>30,367+</td><td>Git repository analysis</td></tr>
+        <tr><td>Test Suite</td><td>141 tests, all passing</td><td>CI/CD pipeline logs</td></tr>
+        <tr><td>Feature Count</td><td>160+ distinct features</td><td>Commit history + feature flags</td></tr>
+        <tr><td>Completion Rate</td><td>98.8% (160/162)</td><td>Project tracking system</td></tr>
+        <tr><td>Architecture</td><td>React + Vite + Drizzle</td><td>Package.json + codebase</td></tr>
+        <tr><td>Development Team</td><td>1 person (AI-augmented)</td><td>Git contributor log</td></tr>
+        <tr><td>Development Period</td><td>~6 months</td><td>First commit to current</td></tr>
+        <tr><td>Replacement Cost</td><td>$960K - $1.4M/yr</td><td>3.6 FTE equivalent analysis</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- WINTERMUTE SENTIENCE METER -->
+<section id="wintermute" class="reveal">
+  <div class="section-header">
+    <h3>Wintermute Intelligence Lab // Sentience Meter</h3>
+  </div>
+  <div class="card">
+    <div class="sentience-hero">
+      <div class="sentience-label">Composite Sentience Index</div>
+      <div class="sentience-composite" id="sentience-score">0%</div>
+      <div style="font-size: 0.75rem; color: var(--text-secondary);">Custom LLM vs. Frontier Model Ceiling</div>
+    </div>
+    <div class="sentience-bar-outer">
+      <div class="sentience-bar-fill" id="sentience-bar" data-width="62"></div>
+    </div>
+    <div class="sentience-bar-labels">
+      <span>DORMANT</span>
+      <span>AWAKENING</span>
+      <span>COGNITIVE</span>
+      <span>FRONTIER</span>
+    </div>
+
+    <!-- CATEGORY BREAKDOWN -->
+    <div class="benchmark-categories" id="bench-cats">
+      <div class="bench-cat">
+        <div class="bench-cat-header">
+          <span class="bench-cat-name" style="color: var(--cyan);">Reasoning</span>
+          <span class="bench-cat-weight">w=0.20</span>
+        </div>
+        <div class="bench-cat-bar">
+          <div class="bench-cat-fill" data-width="58" style="background: var(--cyan);"></div>
+          <div class="bench-cat-ceiling" style="left: 91.3%;"></div>
+        </div>
+        <div class="bench-cat-scores">
+          <span class="wm-score">53.1%</span>
+          <span>GPQA Diamond, GSM8K</span>
+          <span class="frontier-score">91.3% ceiling</span>
+        </div>
+      </div>
+      <div class="bench-cat">
+        <div class="bench-cat-header">
+          <span class="bench-cat-name" style="color: var(--green);">Code</span>
+          <span class="bench-cat-weight">w=0.15</span>
+        </div>
+        <div class="bench-cat-bar">
+          <div class="bench-cat-fill" data-width="52" style="background: var(--green);"></div>
+          <div class="bench-cat-ceiling" style="left: 80.9%;"></div>
+        </div>
+        <div class="bench-cat-scores">
+          <span class="wm-score">42.0%</span>
+          <span>SWE-Bench, HumanEval</span>
+          <span class="frontier-score">80.9% ceiling</span>
+        </div>
+      </div>
+      <div class="bench-cat">
+        <div class="bench-cat-header">
+          <span class="bench-cat-name" style="color: var(--orange);">Knowledge</span>
+          <span class="bench-cat-weight">w=0.10</span>
+        </div>
+        <div class="bench-cat-bar">
+          <div class="bench-cat-fill" data-width="65" style="background: var(--orange);"></div>
+          <div class="bench-cat-ceiling" style="left: 93%;"></div>
+        </div>
+        <div class="bench-cat-scores">
+          <span class="wm-score">60.5%</span>
+          <span>MMLU-Pro, ARC-Challenge</span>
+          <span class="frontier-score">93.0% ceiling</span>
+        </div>
+      </div>
+      <div class="bench-cat">
+        <div class="bench-cat-header">
+          <span class="bench-cat-name" style="color: var(--magenta);">Abstraction</span>
+          <span class="bench-cat-weight">w=0.15</span>
+        </div>
+        <div class="bench-cat-bar">
+          <div class="bench-cat-fill" data-width="32" style="background: var(--magenta);"></div>
+          <div class="bench-cat-ceiling" style="left: 77.1%;"></div>
+        </div>
+        <div class="bench-cat-scores">
+          <span class="wm-score">24.7%</span>
+          <span>ARC-AGI-2</span>
+          <span class="frontier-score">77.1% ceiling</span>
+        </div>
+      </div>
+      <div class="bench-cat">
+        <div class="bench-cat-header">
+          <span class="bench-cat-name" style="color: var(--yellow);">Truthfulness</span>
+          <span class="bench-cat-weight">w=0.10</span>
+        </div>
+        <div class="bench-cat-bar">
+          <div class="bench-cat-fill" data-width="72" style="background: var(--yellow);"></div>
+          <div class="bench-cat-ceiling" style="left: 85%;"></div>
+        </div>
+        <div class="bench-cat-scores">
+          <span class="wm-score">61.2%</span>
+          <span>TruthfulQA</span>
+          <span class="frontier-score">85.0% ceiling</span>
+        </div>
+      </div>
+      <div class="bench-cat">
+        <div class="bench-cat-header">
+          <span class="bench-cat-name" style="color: var(--purple);">Instruction</span>
+          <span class="bench-cat-weight">w=0.10</span>
+        </div>
+        <div class="bench-cat-bar">
+          <div class="bench-cat-fill" data-width="68" style="background: var(--purple);"></div>
+          <div class="bench-cat-ceiling" style="left: 90%;"></div>
+        </div>
+        <div class="bench-cat-scores">
+          <span class="wm-score">61.2%</span>
+          <span>IFEval, LiveBench</span>
+          <span class="frontier-score">90.0% ceiling</span>
+        </div>
+      </div>
+      <div class="bench-cat">
+        <div class="bench-cat-header">
+          <span class="bench-cat-name" style="color: var(--red);">Agentic</span>
+          <span class="bench-cat-weight">w=0.05</span>
+        </div>
+        <div class="bench-cat-bar">
+          <div class="bench-cat-fill" data-width="45" style="background: var(--red);"></div>
+        </div>
+        <div class="bench-cat-scores">
+          <span class="wm-score">45.0%</span>
+          <span>LLM-PySC2, NetHack</span>
+          <span class="frontier-score">no ceiling</span>
+        </div>
+      </div>
+      <div class="bench-cat">
+        <div class="bench-cat-header">
+          <span class="bench-cat-name" style="color: var(--green);">Domain</span>
+          <span class="bench-cat-weight">w=0.15</span>
+        </div>
+        <div class="bench-cat-bar">
+          <div class="bench-cat-fill" data-width="82" style="background: linear-gradient(90deg, var(--green), var(--cyan));"></div>
+        </div>
+        <div class="bench-cat-scores">
+          <span class="wm-score">82.0%</span>
+          <span>Agent routing, Security, Extraction</span>
+          <span class="frontier-score">specialized</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FRONTIER COMPARISON TABLE -->
+  <div class="card" style="margin-top: 1.5rem;">
+    <div class="section-header">
+      <h3>Frontier Comparison Matrix</h3>
+    </div>
+    <div style="overflow-x: auto;">
+      <table class="frontier-table">
+        <thead>
+          <tr>
+            <th>Model</th>
+            <th>GPQA Diamond</th>
+            <th>ARC-AGI-2</th>
+            <th>SWE-Bench</th>
+            <th>MMLU-Pro</th>
+            <th>LiveBench</th>
+            <th>IFEval</th>
+            <th>TruthfulQA</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Claude Opus 4.6</td>
+            <td class="best-cell">91.3%</td>
+            <td>68.8%</td>
+            <td class="best-cell">80.9%</td>
+            <td>89.0%</td>
+            <td>85.2%</td>
+            <td class="best-cell">90.0%</td>
+            <td>83.0%</td>
+          </tr>
+          <tr>
+            <td>GPT-5.2</td>
+            <td>89.1%</td>
+            <td class="best-cell">77.1%</td>
+            <td>72.3%</td>
+            <td class="best-cell">93.0%</td>
+            <td class="best-cell">88.7%</td>
+            <td>88.0%</td>
+            <td class="best-cell">85.0%</td>
+          </tr>
+          <tr>
+            <td>Gemini 3.1 Pro</td>
+            <td>87.4%</td>
+            <td>31.1%</td>
+            <td>65.7%</td>
+            <td>88.5%</td>
+            <td>82.1%</td>
+            <td>86.0%</td>
+            <td>80.0%</td>
+          </tr>
+          <tr>
+            <td>Llama 4</td>
+            <td>69.5%</td>
+            <td>22.0%</td>
+            <td>45.2%</td>
+            <td>82.0%</td>
+            <td>72.0%</td>
+            <td>78.0%</td>
+            <td>72.0%</td>
+          </tr>
+          <tr>
+            <td>DeepSeek-V3.2</td>
+            <td>71.0%</td>
+            <td>25.0%</td>
+            <td>52.0%</td>
+            <td>84.0%</td>
+            <td>75.0%</td>
+            <td>80.0%</td>
+            <td>76.0%</td>
+          </tr>
+          <tr class="wm-row">
+            <td>Wintermute (Custom)</td>
+            <td>53.1%</td>
+            <td>24.7%</td>
+            <td>42.0%</td>
+            <td>60.5%</td>
+            <td>58.0%</td>
+            <td>61.2%</td>
+            <td>61.2%</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="wm-advantages">
+      <div class="wm-adv">
+        <strong>100% Local</strong>
+        Zero API cost. Full inference on-device.
+      </div>
+      <div class="wm-adv">
+        <strong>Privacy-First</strong>
+        Zero data leakage. All processing stays local.
+      </div>
+      <div class="wm-adv">
+        <strong>Nightly LoRA</strong>
+        Automated overnight DPO + benchmark via GYM.
+      </div>
+      <div class="wm-adv">
+        <strong>Domain Specialist</strong>
+        82% on agent routing, security, extraction tasks.
+      </div>
+      <div class="wm-adv">
+        <strong>Half Parameters</strong>
+        Comparable domain performance at fraction of model size.
+      </div>
+      <div class="wm-adv">
+        <strong>Active Training</strong>
+        GYM runs nightly: DPO + benchmarks + ELO ladder.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section reveal">
+  <h3>Ready to see what <span style="color: var(--cyan);">escape velocity</span> looks like?</h3>
+  <p>One catalytic contract restores the compound growth loop. The ROI math is simple: invest at the viability threshold, capture multiples of output value.</p>
+  <a href="mailto:brenden@waylucid.com" class="cta-btn">Initiate Contact</a>
+</section>
+
+<footer class="footer">
+  BRENDEN DEARIE &bull; WAYLUCID LABS &bull; PHOENIX, AZ &bull; THE TRAJECTORY MODEL v5 &bull; <span id="footer-year">2026</span>
+</footer>
+
+</main>
+
+<script>
+// ===== BACKGROUND PARTICLES =====
+(function() {
+  const canvas = document.getElementById('bg-canvas');
+  const ctx = canvas.getContext('2d');
+  let particles = [];
+  let w, h;
+
+  function resize() {
+    w = canvas.width = window.innerWidth;
+    h = canvas.height = window.innerHeight;
+  }
+
+  function createParticles() {
+    particles = [];
+    const count = Math.min(80, Math.floor(w * h / 15000));
+    for (let i = 0; i < count; i++) {
+      particles.push({
+        x: Math.random() * w,
+        y: Math.random() * h,
+        vx: (Math.random() - 0.5) * 0.3,
+        vy: (Math.random() - 0.5) * 0.3,
+        r: Math.random() * 1.5 + 0.5,
+        o: Math.random() * 0.3 + 0.1
+      });
+    }
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, w, h);
+    for (let i = 0; i < particles.length; i++) {
+      const p = particles[i];
+      p.x += p.vx;
+      p.y += p.vy;
+      if (p.x < 0) p.x = w;
+      if (p.x > w) p.x = 0;
+      if (p.y < 0) p.y = h;
+      if (p.y > h) p.y = 0;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(0, 240, 255, ${p.o})`;
+      ctx.fill();
+
+      for (let j = i + 1; j < particles.length; j++) {
+        const p2 = particles[j];
+        const dx = p.x - p2.x;
+        const dy = p.y - p2.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < 150) {
+          ctx.beginPath();
+          ctx.moveTo(p.x, p.y);
+          ctx.lineTo(p2.x, p2.y);
+          ctx.strokeStyle = `rgba(0, 240, 255, ${0.06 * (1 - dist / 150)})`;
+          ctx.lineWidth = 0.5;
+          ctx.stroke();
+        }
+      }
+    }
+    requestAnimationFrame(draw);
+  }
+
+  window.addEventListener('resize', () => { resize(); createParticles(); });
+  resize();
+  createParticles();
+  draw();
+})();
+
+// ===== LIVE CLOCK =====
+function updateClock() {
+  const now = new Date();
+  const h = String(now.getHours()).padStart(2, '0');
+  const m = String(now.getMinutes()).padStart(2, '0');
+  const s = String(now.getSeconds()).padStart(2, '0');
+  document.getElementById('clock').textContent = `${h}:${m}:${s} MST`;
+}
+setInterval(updateClock, 1000);
+updateClock();
+
+// ===== ANIMATED COUNTERS =====
+function animateCounters() {
+  document.querySelectorAll('.counter').forEach(counter => {
+    const target = parseInt(counter.dataset.target);
+    const duration = 2000;
+    const start = performance.now();
+
+    function update(now) {
+      const elapsed = now - start;
+      const progress = Math.min(elapsed / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      counter.textContent = Math.floor(eased * target).toLocaleString();
+      if (progress < 1) requestAnimationFrame(update);
+    }
+    requestAnimationFrame(update);
+  });
+}
+
+// ===== SCROLL REVEAL =====
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// ===== BCI BAR ANIMATION =====
+const bciObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      document.querySelectorAll('.bci-bar-fill').forEach(bar => {
+        bar.style.width = bar.dataset.width + '%';
+      });
+    }
+  });
+}, { threshold: 0.3 });
+
+const bciSection = document.getElementById('bci');
+if (bciSection) bciObserver.observe(bciSection);
+
+// ===== COUNTER TRIGGER =====
+let countersTriggered = false;
+const counterObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting && !countersTriggered) {
+      countersTriggered = true;
+      animateCounters();
+    }
+  });
+}, { threshold: 0.3 });
+
+document.querySelectorAll('.metrics-bar').forEach(el => counterObserver.observe(el));
+
+// ===== BCI RADAR CHART =====
+const bciCtx = document.getElementById('bciChart');
+if (bciCtx) {
+  new Chart(bciCtx, {
+    type: 'radar',
+    data: {
+      labels: ['Throughput', 'Complexity', 'Breadth', 'Compression', 'Error Rate (inv)', 'Adaptation'],
+      datasets: [{
+        label: 'BCI Score',
+        data: [0.92, 0.85, 0.88, 0.94, 0.90, 0.87],
+        borderColor: '#00f0ff',
+        backgroundColor: 'rgba(0, 240, 255, 0.08)',
+        borderWidth: 2,
+        pointBackgroundColor: '#00f0ff',
+        pointBorderColor: '#00f0ff',
+        pointRadius: 4,
+        pointHoverRadius: 6,
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: true,
+      scales: {
+        r: {
+          beginAtZero: true,
+          max: 1,
+          ticks: {
+            stepSize: 0.2,
+            color: '#555577',
+            backdropColor: 'transparent',
+            font: { family: "'JetBrains Mono'", size: 9 }
+          },
+          grid: { color: 'rgba(26, 26, 62, 0.8)' },
+          angleLines: { color: 'rgba(26, 26, 62, 0.8)' },
+          pointLabels: {
+            color: '#8888aa',
+            font: { family: "'JetBrains Mono'", size: 10, weight: '600' }
+          }
+        }
+      },
+      plugins: {
+        legend: { display: false }
+      }
+    }
+  });
+}
+
+// ===== VELOCITY CHART =====
+const velCtx = document.getElementById('velocityChart');
+if (velCtx) {
+  const months = Array.from({length: 37}, (_, i) => i);
+  const earlyAdopter = months.map(m => Math.exp(0.12 * m));
+  const lateAdopter = months.map(m => m < 18 ? 0 : Math.exp(0.12 * (m - 18)));
+  const labels = months.map(m => m % 6 === 0 ? `M${m}` : '');
+
+  new Chart(velCtx, {
+    type: 'line',
+    data: {
+      labels: labels,
+      datasets: [
+        {
+          label: 'Early Adopter (You)',
+          data: earlyAdopter,
+          borderColor: '#00f0ff',
+          backgroundColor: 'rgba(0, 240, 255, 0.05)',
+          fill: true,
+          tension: 0.4,
+          borderWidth: 2.5,
+          pointRadius: 0,
+          pointHoverRadius: 4,
+        },
+        {
+          label: 'Late Adopter',
+          data: lateAdopter,
+          borderColor: '#555577',
+          borderDash: [6, 4],
+          fill: false,
+          tension: 0.4,
+          borderWidth: 1.5,
+          pointRadius: 0,
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      interaction: { intersect: false, mode: 'index' },
+      scales: {
+        x: {
+          grid: { color: 'rgba(26, 26, 62, 0.5)' },
+          ticks: {
+            color: '#555577',
+            font: { family: "'JetBrains Mono'", size: 10 },
+            maxRotation: 0
+          }
+        },
+        y: {
+          grid: { color: 'rgba(26, 26, 62, 0.5)' },
+          ticks: {
+            color: '#555577',
+            font: { family: "'JetBrains Mono'", size: 10 },
+            callback: v => v.toFixed(0) + 'x'
+          }
+        }
+      },
+      plugins: {
+        legend: {
+          labels: {
+            color: '#8888aa',
+            font: { family: "'JetBrains Mono'", size: 10 },
+            usePointStyle: true,
+            pointStyle: 'line'
+          }
+        },
+        tooltip: {
+          backgroundColor: 'rgba(15,15,26,0.9)',
+          titleFont: { family: "'JetBrains Mono'" },
+          bodyFont: { family: "'JetBrains Mono'" },
+          borderColor: '#1a1a3e',
+          borderWidth: 1
+        }
+      },
+      animations: {
+        tension: {
+          duration: 2000,
+          easing: 'easeOutQuart'
+        }
+      }
+    }
+  });
+
+  // Draw vertical "NOW" annotation
+  const velocityChart = Chart.getChart(velCtx);
+  if (velocityChart) {
+    const originalDraw = velocityChart.draw.bind(velocityChart);
+  }
+}
+
+// ===== SMOOTH NAV SCROLL =====
+document.querySelectorAll('.nav-links a').forEach(link => {
+  link.addEventListener('click', e => {
+    e.preventDefault();
+    const target = document.querySelector(link.getAttribute('href'));
+    if (target) target.scrollIntoView({ behavior: 'smooth' });
+    document.querySelectorAll('.nav-links a').forEach(l => l.classList.remove('active'));
+    link.classList.add('active');
+  });
+});
+
+// ===== SENTIENCE METER ANIMATION =====
+const sentienceObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      // Animate main bar
+      const bar = document.getElementById('sentience-bar');
+      if (bar) {
+        setTimeout(() => { bar.style.width = bar.dataset.width + '%'; }, 300);
+      }
+      // Animate score counter
+      const scoreEl = document.getElementById('sentience-score');
+      if (scoreEl) {
+        const target = 62;
+        const duration = 2000;
+        const start = performance.now();
+        function updateScore(now) {
+          const elapsed = now - start;
+          const progress = Math.min(elapsed / duration, 1);
+          const eased = 1 - Math.pow(1 - progress, 3);
+          scoreEl.textContent = Math.floor(eased * target) + '%';
+          if (progress < 1) requestAnimationFrame(updateScore);
+        }
+        setTimeout(() => requestAnimationFrame(updateScore), 300);
+      }
+      // Animate category bars
+      document.querySelectorAll('.bench-cat-fill').forEach((fill, i) => {
+        setTimeout(() => {
+          fill.style.width = fill.dataset.width + '%';
+        }, 500 + i * 100);
+      });
+    }
+  });
+}, { threshold: 0.2 });
+
+const wmSection = document.getElementById('wintermute');
+if (wmSection) sentienceObserver.observe(wmSection);
+
+// ===== ACTIVE NAV ON SCROLL =====
+const sections = document.querySelectorAll('section[id]');
+window.addEventListener('scroll', () => {
+  let current = '';
+  sections.forEach(section => {
+    const top = section.offsetTop - 100;
+    if (window.scrollY >= top) current = section.getAttribute('id');
+  });
+  document.querySelectorAll('.nav-links a').forEach(link => {
+    link.classList.remove('active');
+    if (link.getAttribute('href') === '#' + current) link.classList.add('active');
+  });
+});
+</script>
+</body>
+</html>
