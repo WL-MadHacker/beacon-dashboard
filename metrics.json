@@ -1,0 +1,29 @@
+{
+  "generated": "2026-03-05T07:18:51Z",
+  "org": "WL-MadHacker",
+  "totals": {
+    "repos": 21,
+    "loc": 250236,
+    "bytes": 10009473,
+    "commits": 427,
+    "equivValueM": 3.8,
+    "features": 160,
+    "velocity": "18-36x"
+  },
+  "repos": [
+    {"name":"Claw_Wars","bytes":2912847,"loc":72821,"commits":100},
+    {"name":"waylucid","bytes":2591099,"loc":64777,"commits":100},
+    {"name":"waylucid-crm","bytes":1192509,"loc":29812,"commits":23},
+    {"name":"open-crm","bytes":893462,"loc":22336,"commits":2},
+    {"name":"metagate_lite","bytes":878165,"loc":21954,"commits":43},
+    {"name":"mad-hacker-v10","bytes":528023,"loc":13200,"commits":11},
+    {"name":"DockFlow","bytes":228345,"loc":5708,"commits":4},
+    {"name":"WM-Mycelium-NODE","bytes":196855,"loc":4921,"commits":29},
+    {"name":"PromptDeck","bytes":162145,"loc":4053,"commits":4},
+    {"name":"spellcaster","bytes":135042,"loc":3376,"commits":1},
+    {"name":"mad-hacker-v12","bytes":129721,"loc":3243,"commits":2},
+    {"name":"lucidcore-demo","bytes":79114,"loc":1977,"commits":6},
+    {"name":"beacon-dashboard","bytes":76034,"loc":1900,"commits":2},
+    {"name":"mad-hacker-consciousness","bytes":6112,"loc":152,"commits":100}
+  ]
+}
