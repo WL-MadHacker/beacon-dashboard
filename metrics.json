@@ -1,0 +1,494 @@
+{
+  "generated": "2026-05-11T00:00:00Z",
+  "orgs": [
+    "WL-MadHacker",
+    "ProtocolGemini",
+    "WayLucid-Org"
+  ],
+  "totals": {
+    "repos": 53,
+    "uniqueProjects": 77,
+    "loc": 4271528,
+    "bytes": 170861120,
+    "commits": 23477,
+    "equivValueM": 52.5,
+    "equivValueLowM": 37,
+    "equivValueHighM": 68,
+    "equivMethod": "Range: replication cost (low) to specialty-weighted feature-point complexity (high). LOW = 4,271,528 LOC \u00f7 38,000 LOC/sr/yr = 112 senior person-yrs \u00d7 $300,000 loaded \u00d7 1.1 specialty = ~$37M. HIGH = 2,147 features \u00d7 ~$31.5K complexity-weighted = ~$68M.",
+    "features": 2147,
+    "velocity": "25-48x",
+    "velocityMethod": "Multiplier vs. industry baseline of 4.5-8.5 production features shipped per year per senior dev (ProductPlan / industry survey). Actual: 2,147 features \u00f7 10yr = 214.7/yr. Multiplier range: 214.7/8.5 \u2248 25x to 214.7/4.5 \u2248 48x.",
+    "completionPct": 100.0,
+    "completionMethod": "domainsActive / domainsTarget \u00d7 100"
+  },
+  "repos": [
+    {
+      "name": "SYS-01",
+      "bytes": 67396080,
+      "loc": 1684902,
+      "commits": 0
+    },
+    {
+      "name": "SYS-02",
+      "bytes": 48537880,
+      "loc": 1213447,
+      "commits": 38
+    },
+    {
+      "name": "SYS-03",
+      "bytes": 24496320,
+      "loc": 612408,
+      "commits": 0
+    },
+    {
+      "name": "SYS-04",
+      "bytes": 5930960,
+      "loc": 148274,
+      "commits": 178
+    },
+    {
+      "name": "SYS-05",
+      "bytes": 4196520,
+      "loc": 104913,
+      "commits": 101
+    },
+    {
+      "name": "SYS-06",
+      "bytes": 3727440,
+      "loc": 93186,
+      "commits": 15918
+    },
+    {
+      "name": "SYS-07",
+      "bytes": 1972680,
+      "loc": 49317,
+      "commits": 49
+    },
+    {
+      "name": "SYS-08",
+      "bytes": 1611520,
+      "loc": 40288,
+      "commits": 43
+    },
+    {
+      "name": "SYS-09",
+      "bytes": 1396840,
+      "loc": 34921,
+      "commits": 52
+    },
+    {
+      "name": "SYS-10",
+      "bytes": 1356480,
+      "loc": 33912,
+      "commits": 74
+    },
+    {
+      "name": "SYS-11",
+      "bytes": 1205880,
+      "loc": 30147,
+      "commits": 6
+    },
+    {
+      "name": "SYS-12",
+      "bytes": 1176320,
+      "loc": 29408,
+      "commits": 44
+    },
+    {
+      "name": "SYS-13",
+      "bytes": 1069720,
+      "loc": 26743,
+      "commits": 61
+    },
+    {
+      "name": "SYS-14",
+      "bytes": 991320,
+      "loc": 24783,
+      "commits": 47
+    },
+    {
+      "name": "SYS-15",
+      "bytes": 771440,
+      "loc": 19286,
+      "commits": 33
+    },
+    {
+      "name": "SYS-16",
+      "bytes": 695760,
+      "loc": 17394,
+      "commits": 28
+    },
+    {
+      "name": "SYS-17",
+      "bytes": 568280,
+      "loc": 14207,
+      "commits": 58
+    },
+    {
+      "name": "SYS-18",
+      "bytes": 531480,
+      "loc": 13287,
+      "commits": 263
+    },
+    {
+      "name": "SYS-19",
+      "bytes": 473680,
+      "loc": 11842,
+      "commits": 63
+    },
+    {
+      "name": "SYS-20",
+      "bytes": 418920,
+      "loc": 10473,
+      "commits": 19
+    },
+    {
+      "name": "SYS-21",
+      "bytes": 387360,
+      "loc": 9684,
+      "commits": 34
+    },
+    {
+      "name": "SYS-22",
+      "bytes": 312840,
+      "loc": 7821,
+      "commits": 8
+    },
+    {
+      "name": "SYS-23",
+      "bytes": 251760,
+      "loc": 6294,
+      "commits": 17
+    },
+    {
+      "name": "SYS-24",
+      "bytes": 233480,
+      "loc": 5837,
+      "commits": 7
+    },
+    {
+      "name": "SYS-25",
+      "bytes": 196920,
+      "loc": 4923,
+      "commits": 4
+    },
+    {
+      "name": "SYS-26",
+      "bytes": 188480,
+      "loc": 4712,
+      "commits": 53
+    },
+    {
+      "name": "SYS-27",
+      "bytes": 171320,
+      "loc": 4283,
+      "commits": 24
+    },
+    {
+      "name": "SYS-28",
+      "bytes": 101880,
+      "loc": 2547,
+      "commits": 14
+    },
+    {
+      "name": "SYS-29",
+      "bytes": 75720,
+      "loc": 1893,
+      "commits": 3
+    },
+    {
+      "name": "SYS-30",
+      "bytes": 59480,
+      "loc": 1487,
+      "commits": 1
+    },
+    {
+      "name": "SYS-31",
+      "bytes": 51760,
+      "loc": 1294,
+      "commits": 5
+    },
+    {
+      "name": "SYS-32",
+      "bytes": 45680,
+      "loc": 1142,
+      "commits": 1
+    },
+    {
+      "name": "SYS-33",
+      "bytes": 39360,
+      "loc": 984,
+      "commits": 1
+    },
+    {
+      "name": "SYS-34",
+      "bytes": 33080,
+      "loc": 827,
+      "commits": 1
+    },
+    {
+      "name": "SYS-35",
+      "bytes": 29720,
+      "loc": 743,
+      "commits": 1
+    },
+    {
+      "name": "SYS-36",
+      "bytes": 26320,
+      "loc": 658,
+      "commits": 1
+    },
+    {
+      "name": "SYS-37",
+      "bytes": 25240,
+      "loc": 631,
+      "commits": 3
+    },
+    {
+      "name": "SYS-38",
+      "bytes": 22880,
+      "loc": 572,
+      "commits": 46
+    },
+    {
+      "name": "SYS-39",
+      "bytes": 19240,
+      "loc": 481,
+      "commits": 1
+    },
+    {
+      "name": "SYS-40",
+      "bytes": 15920,
+      "loc": 398,
+      "commits": 2
+    },
+    {
+      "name": "SYS-41",
+      "bytes": 13880,
+      "loc": 347,
+      "commits": 9
+    },
+    {
+      "name": "SYS-42",
+      "bytes": 12480,
+      "loc": 312,
+      "commits": 0
+    },
+    {
+      "name": "SYS-43",
+      "bytes": 10520,
+      "loc": 263,
+      "commits": 11
+    },
+    {
+      "name": "SYS-44",
+      "bytes": 7760,
+      "loc": 194,
+      "commits": 6147
+    },
+    {
+      "name": "SYS-45",
+      "bytes": 2520,
+      "loc": 63,
+      "commits": 4
+    },
+    {
+      "name": "SYS-46",
+      "bytes": 0,
+      "loc": 0,
+      "commits": 1
+    },
+    {
+      "name": "SYS-47",
+      "bytes": 0,
+      "loc": 0,
+      "commits": 2
+    },
+    {
+      "name": "SYS-48",
+      "bytes": 0,
+      "loc": 0,
+      "commits": 0
+    },
+    {
+      "name": "SYS-49",
+      "bytes": 0,
+      "loc": 0,
+      "commits": 1
+    },
+    {
+      "name": "SYS-50",
+      "bytes": 0,
+      "loc": 0,
+      "commits": 0
+    }
+  ],
+  "rarity": {
+    "referencePopulation": 28700000,
+    "correlationFactorConservative": 1400000000000.0,
+    "correlationFactorModerate": 77000000000.0,
+    "targetPRI": 1000000000,
+    "priConservative": 734835718,
+    "priModerate": 13360649427,
+    "priGeoMean": 3133350031,
+    "priFormula": "1 / (\u220fPi \u00d7 \u03ba \u00d7 N)  where \u220fPi = product of dim probabilities, \u03ba = correlation factor, N = reference population",
+    "escapeVelocityPct": 93,
+    "escapeVelocityFormula": "max(0, min(100, round( (log10(geoPRI) - log10(1e3)) / (log10(1e10) - log10(1e3)) * 100 )))",
+    "tier": 7,
+    "tierFormula": "max(1, min(9, floor(log10(geoPRI)) - 2))",
+    "domainIntersectionCount": 9,
+    "domainFormula": "count of rarity dimensions where (1/p) > 50",
+    "dimensions": [
+      {
+        "id": "solo_loc",
+        "label": "Solo Operator >4.3M LOC",
+        "p": 2e-05,
+        "rarity": 50000,
+        "source": "GitHub Octoverse + COCOMO II",
+        "tier": "output",
+        "timeLocked": false
+      },
+      {
+        "id": "velocity",
+        "label": "25-48x Dev Velocity",
+        "p": 0.004,
+        "rarity": 250,
+        "source": "DORA State of DevOps + ProductPlan",
+        "tier": "output",
+        "timeLocked": false
+      },
+      {
+        "id": "repos",
+        "label": "77+ Unique Production Projects",
+        "p": 0.006,
+        "rarity": 167,
+        "source": "GitHub Developer Survey",
+        "tier": "output",
+        "timeLocked": false
+      },
+      {
+        "id": "features",
+        "label": "2,147+ Features Shipped Solo",
+        "p": 0.00028,
+        "rarity": 3571,
+        "source": "ProductPlan Industry Benchmark",
+        "tier": "output",
+        "timeLocked": false
+      },
+      {
+        "id": "stack_depth",
+        "label": "27+ Tech Stack Depth",
+        "p": 0.018,
+        "rarity": 56,
+        "source": "StackOverflow Developer Survey",
+        "tier": "output",
+        "timeLocked": false
+      },
+      {
+        "id": "founder",
+        "label": "Self-Employed Founder (No Ceiling)",
+        "p": 0.08,
+        "rarity": 12,
+        "source": "BLS / Statista Developer Employment",
+        "tier": "structural",
+        "timeLocked": false
+      },
+      {
+        "id": "grit",
+        "label": "~10yr Sustained Startup Tenure",
+        "p": 0.05,
+        "rarity": 20,
+        "source": "Kauffman Foundation Startup Survival",
+        "tier": "structural",
+        "timeLocked": true
+      },
+      {
+        "id": "ai_native",
+        "label": "AI-Native + Agent Orchestration (>85%)",
+        "p": 0.014,
+        "rarity": 71,
+        "source": "GitHub Copilot + JetBrains Survey",
+        "tier": "structural",
+        "timeLocked": false
+      },
+      {
+        "id": "custom_llm",
+        "label": "Custom LLM >111% Frontier",
+        "p": 0.0001,
+        "rarity": 10000,
+        "source": "HuggingFace Model Census",
+        "tier": "rare",
+        "timeLocked": false
+      },
+      {
+        "id": "bci",
+        "label": "BCI/Neurotech Research Depth",
+        "p": 0.0005,
+        "rarity": 2000,
+        "source": "IEEE / BCI Society Membership",
+        "tier": "rare",
+        "timeLocked": true
+      },
+      {
+        "id": "benchmarks",
+        "label": "Published AI Benchmark Results",
+        "p": 0.005,
+        "rarity": 200,
+        "source": "Papers With Code / HuggingFace",
+        "tier": "rare",
+        "timeLocked": false
+      }
+    ],
+    "trajectory": {
+      "locGrowthPerDay": 19450,
+      "locGrowthMethod": "Self-reported peak daily output during recent acceleration phase (~last 90d). Not industry-derived.",
+      "velocitySustainedMonths": 12,
+      "domainsActive": 10,
+      "domainsTarget": 10,
+      "projectedMonthsTo1B": 0,
+      "projectedStatus": "ACHIEVED \u2014 geo mean already exceeds target"
+    }
+  },
+  "wintermute": {
+    "compositeFrontierPct": 111.32,
+    "compositeFormula": "mean(score / frontier_ceiling) across benchmarks with published ceilings \u00d7 100",
+    "benchmarks": [
+      {
+        "name": "Reasoning",
+        "score": 94.5,
+        "frontierCeiling": 91.3,
+        "ratio": 1.035
+      },
+      {
+        "name": "Code",
+        "score": 97.0,
+        "frontierCeiling": 80.9,
+        "ratio": 1.199
+      },
+      {
+        "name": "Knowledge",
+        "score": 95.5,
+        "frontierCeiling": 93.0,
+        "ratio": 1.0269
+      },
+      {
+        "name": "Abstraction",
+        "score": 96.0,
+        "frontierCeiling": 77.1,
+        "ratio": 1.2451
+      },
+      {
+        "name": "Truthfulness",
+        "score": 94.5,
+        "frontierCeiling": 85.0,
+        "ratio": 1.1118
+      },
+      {
+        "name": "Instruction",
+        "score": 95.5,
+        "frontierCeiling": 90.0,
+        "ratio": 1.0611
+      }
+    ]
+  }
+}

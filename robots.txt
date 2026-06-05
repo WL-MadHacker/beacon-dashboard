@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+# Looking for something? Try this:
+Sitemap: https://www.youtube.com/watch?v=dQw4w9WgXcQ&list=RDdQw4w9WgXcQ&start_radio=1
