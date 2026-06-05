@@ -8,8 +8,19 @@
 <meta http-equiv="Expires" content="0">
 <title>BRENDEN DEARIE // Command Interface</title>
 <meta name="description" content="AI-Native Developer — 4.27M+ LOC, 53 repos, solo operator. See the signal.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="canonical" href="https://wl-madhacker.github.io/beacon-dashboard/">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://wl-madhacker.github.io/beacon-dashboard/">
 <meta property="og:title" content="Brenden Dearie — AI-Native Developer">
 <meta property="og:description" content="4.27M+ LOC. 53 repos. 23K+ commits. $37-68M output. Solo operator. Command interface.">
+<meta property="og:image" content="https://wl-madhacker.github.io/beacon-dashboard/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Brenden Dearie — AI-Native Developer">
+<meta name="twitter:description" content="4.27M+ LOC. 53 repos. 25-48x velocity. Solo operator.">
+<meta name="twitter:image" content="https://wl-madhacker.github.io/beacon-dashboard/og-image.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -73,6 +84,18 @@
 }
 
 html { scroll-behavior: smooth; }
+
+/* Respect reduced-motion: kill animations/transitions and continuous loops */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+  .tm-sheen { display: none !important; }
+}
 
 body {
   background: var(--grad-bg);
@@ -1688,6 +1711,12 @@ body::after {
 <script>
 (function() {
   const canvas = document.getElementById('three-bg');
+  // Honor reduced-motion: skip the animated WebGL background entirely.
+  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    if (canvas) canvas.style.display = 'none';
+    return;
+  }
+  if (typeof THREE === 'undefined') { if (canvas) canvas.style.display = 'none'; return; }
   const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
   renderer.setSize(window.innerWidth, window.innerHeight);
@@ -2385,7 +2414,7 @@ body::after {
   </div>
   <div class="right">
     <span>Qwen3-30B-A3B MoE</span>
-    <span>Netlify Edge</span>
+    <span>GitHub Pages</span>
     <span id="footer-year">2026</span>
   </div>
 </div>
@@ -2958,11 +2987,13 @@ function heroParticleBurst() {
     setTimeout(() => p.remove(), 1500);
   }
 }
-// Trigger after counter finishes
-setTimeout(heroParticleBurst, 2700);
+// Trigger after counter finishes (skip if reduced-motion)
+const REDUCE_MOTION = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+if (!REDUCE_MOTION) setTimeout(heroParticleBurst, 2700);
 
 // ===== UPGRADE 6: FROSTED GLASS PARALLAX =====
 (function() {
+  if (REDUCE_MOTION) return;   // no continuous mouse-parallax for reduced-motion
   const panels = document.querySelectorAll('.panel, .wintermute-section');
   let px = 0, py = 0;
   document.addEventListener('mousemove', (e) => {
@@ -3079,6 +3110,9 @@ if (sysGrid) sparkObs.observe(sysGrid, { childList: true });
 (function() {
   const canvas = document.getElementById('neural-net-canvas');
   if (!canvas) return;
+  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    canvas.style.display = 'none'; return;   // honor reduced-motion
+  }
   const ctx = canvas.getContext('2d');
   const dpr = Math.min(window.devicePixelRatio, 2);
 

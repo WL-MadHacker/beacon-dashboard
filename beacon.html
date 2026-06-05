@@ -8,9 +8,17 @@
 <meta http-equiv="Expires" content="0">
 <title>BEACON // Brenden Dearie</title>
 <meta name="description" content="Beacon: AI-Native Developer Talent Signal - Brenden Dearie">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="canonical" href="https://wl-madhacker.github.io/beacon-dashboard/beacon.html">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://wl-madhacker.github.io/beacon-dashboard/beacon.html">
 <meta property="og:title" content="BEACON // Brenden Dearie - AI-Native Developer">
 <meta property="og:description" content="25-48x velocity. 4.27M+ LOC. 2,147+ features. Solo operator. See the signal.">
-<meta property="og:type" content="website">
+<meta property="og:image" content="https://wl-madhacker.github.io/beacon-dashboard/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://wl-madhacker.github.io/beacon-dashboard/og-image.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
@@ -46,6 +54,13 @@
   --sans: 'Inter', sans-serif;
 }
 html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
 body {
   background: var(--bg);
   color: var(--text);
@@ -689,6 +704,7 @@ body {
 <script>
 // Particles
 (function(){
+  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
   const c=document.getElementById('bg-canvas'),x=c.getContext('2d');let p=[],w,h;
   function resize(){w=c.width=innerWidth;h=c.height=innerHeight}
   function init(){p=[];const n=Math.min(50,Math.floor(w*h/20000));for(let i=0;i<n;i++)p.push({x:Math.random()*w,y:Math.random()*h,vx:(Math.random()-0.5)*0.2,vy:(Math.random()-0.5)*0.2,r:Math.random()*1.2+0.3,o:Math.random()*0.2+0.05})}
