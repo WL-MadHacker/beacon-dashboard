@@ -498,7 +498,22 @@
       "name": "Claude Partner Network",
       "issuer": "Anthropic",
       "year": 2026,
-      "status": "Selected"
+      "status": "Member"
     }
-  ]
+  ],
+  "liveSystems": [
+    {
+      "name": "waylucid.com",
+      "url": "https://waylucid.com"
+    },
+    {
+      "name": "card.waylucid.com",
+      "url": "https://card.waylucid.com"
+    },
+    {
+      "name": "github.com/WL-MadHacker",
+      "url": "https://github.com/WL-MadHacker"
+    }
+  ],
+  "localBucketVerification": "Verified 2026-06-11 by measured line count over local working directories (code files only; dependencies, build artifacts, lockfiles, minified files, and VCS directories excluded): 7,499,647 lines measured locally. The 4.27M headline and the 2.30M local buckets are conservative under any duplicate/overlap assumption."
 }

@@ -24,9 +24,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js" integrity="sha384-g4NTh/Iv5PPU4xPyhEWqPcwtNXOvdaDI8LLnyYfyNZOjKJeYQyjzQ9X5275eBjpt" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js" integrity="sha384-Z3REaz79l2IaAZqJsSABtTbhjgOUYyV3p90XNnAPCSHg3EMTz1fouunq9WZRtj3d" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js" integrity="sha384-CjloA8y00+1SDAUkjs099PVfnY2KmDC2BZnws9kh8D/lX1s46w6EPhpXdqMfjK6i" crossorigin="anonymous"></script>
 <style>
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -395,8 +395,47 @@ body::after {
   text-transform: uppercase;
 }
 
+/* Live, verifiable artifact links — the proof row */
+.hero-links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 0.8rem;
+}
+.hero-links a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.08em;
+  color: var(--text-mid);
+  text-decoration: none;
+  padding: 0.32rem 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: rgba(124, 58, 237, 0.08);
+  transition: color 0.15s ease, border-color 0.15s ease, background 0.15s ease, transform 0.15s ease;
+}
+.hero-links a:hover, .hero-links a:focus-visible {
+  color: #fff;
+  border-color: var(--border-bright);
+  background: rgba(124, 58, 237, 0.18);
+  transform: translateY(-1px);
+  outline: none;
+  box-shadow: 0 0 18px rgba(168, 85, 247, 0.3);
+}
+.hero-links .hl-live {
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: var(--green);
+  box-shadow: 0 0 6px var(--green);
+}
+
 @media (max-width: 720px) {
   .command-hero { padding: 3.5rem 1rem 2.5rem; }
+  .hero-links a { font-size: 0.56rem; padding: 0.28rem 0.6rem; }
 }
 
 /* MAIN GRID */
@@ -2278,7 +2317,7 @@ body::after {
 
 <!-- COMMAND HERO -->
 <div class="command-hero" id="hero">
-  <div class="hero-kicker"><span class="pulse"></span> Claude Partner Network &nbsp;//&nbsp; WayLucid R&amp;D</div>
+  <div class="hero-kicker"><span class="pulse"></span> Claude Partner Network &nbsp;&middot;&nbsp; 2026</div>
   <div class="command-stats">
     <div class="primary-metric"><span class="counter" id="hero-loc" data-target="4271528">4,271,528</span></div>
     <div class="primary-label"><b>Lines of code</b> &nbsp;//&nbsp; solo &nbsp;//&nbsp; <b>sustained</b> <button class="m-info" data-method="loc" aria-label="How is this measured?">&#9432;</button></div>
@@ -2286,6 +2325,11 @@ body::after {
   <div class="command-id">
     <div class="callsign" data-text="BRENDEN DEARIE">BRENDEN <span>DEARIE</span></div>
     <div class="designation">AI-Native Developer &nbsp;//&nbsp; Founder, WayLucid &nbsp;//&nbsp; Phoenix, AZ</div>
+    <div class="hero-links">
+      <a href="https://waylucid.com" target="_blank" rel="noopener">waylucid.com <span class="hl-live"></span></a>
+      <a href="https://card.waylucid.com" target="_blank" rel="noopener">card.waylucid.com <span class="hl-live"></span></a>
+      <a href="https://github.com/WL-MadHacker" target="_blank" rel="noopener">github.com/WL-MadHacker</a>
+    </div>
   </div>
 </div>
 
@@ -2870,7 +2914,8 @@ async function fetchLiveMetrics() {
       completion: data.totals.completionMethod,
       pri: data.rarity && data.rarity.priFormula,
       evi: data.rarity && data.rarity.escapeVelocityFormula,
-      locGrowth: data.rarity && data.rarity.trajectory && data.rarity.trajectory.locGrowthMethod
+      locGrowth: data.rarity && data.rarity.trajectory && data.rarity.trajectory.locGrowthMethod,
+      localVerification: data.localBucketVerification
     };
     window.__totalLoc = data.totals.loc;
 
@@ -3606,8 +3651,11 @@ if (!REDUCE_MOTION) setTimeout(heroParticleBurst, 2700);
       body: () =>
         '<p>Estimated from language bytes &divide; <code>40 B/line</code> across GitHub orgs plus local production and AI-agent-generated code. Includes generated code &mdash; this is a measure of <b>output shipped</b>, not hand-typed lines.</p>' +
         '<p style="margin-top:0.6rem">Local and agent-generated buckets carry <b>no public git history</b> &mdash; the treemap marks these <code>LOCAL &middot; UNSYNCED</code> rather than showing a commit count.</p>' +
+        (window.__methods && window.__methods.localVerification
+          ? '<p style="margin-top:0.6rem"><b>Verification:</b> ' + esc(window.__methods.localVerification) + '</p>'
+          : '') +
         '<p style="margin-top:0.6rem">Systems are anonymized as <code>SYS-NN</code> for confidentiality. Point-in-time snapshot' +
-        (window.__methods && window.__methods.generated ? ' as of <code>' + esc(window.__methods.generated.slice(0,10)) + '</code>' : '') + '. Self-reported.</p>'
+        (window.__methods && window.__methods.generated ? ' as of <code>' + esc(window.__methods.generated.slice(0,10)) + '</code>' : '') + '.</p>'
     },
     value: {
       title: 'Output value — valuation range',
@@ -3678,6 +3726,9 @@ if (!REDUCE_MOTION) setTimeout(heroParticleBurst, 2700);
     { label: 'Methodology — how these numbers are measured', tag: 'DOCS', run: () => window.__openMethod('loc') },
     { label: 'Valuation model',               tag: 'DOCS',   run: () => window.__openMethod('value') },
     { label: 'Rarity model (PRI)',            tag: 'DOCS',   run: () => window.__openMethod('rarity') },
+    { label: 'Open waylucid.com',             tag: 'LIVE',   run: () => window.open('https://waylucid.com', '_blank', 'noopener') },
+    { label: 'Open card.waylucid.com',        tag: 'LIVE',   run: () => window.open('https://card.waylucid.com', '_blank', 'noopener') },
+    { label: 'Open GitHub — WL-MadHacker',    tag: 'LIVE',   run: () => window.open('https://github.com/WL-MadHacker', '_blank', 'noopener') },
     { label: 'Book an intro call',            tag: 'ACTION', run: () => window.open('https://calendly.com/bd-waylucid/1-1-waylucid', '_blank', 'noopener') },
     { label: 'Copy email — bd@waylucid.com',  tag: 'ACTION', run: copyEmail },
     { label: 'Open beacon card',              tag: 'ACTION', run: () => { window.location.href = 'beacon.html'; } },
