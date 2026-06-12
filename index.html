@@ -1271,6 +1271,240 @@ body::after {
 
 .frontier-compact .best { color: var(--gold); font-weight: 700; }
 
+/* ===== WM eval note + pipeline cards ===== */
+.wm-eval-note {
+  margin: 0.6rem 0 1rem;
+  font-family: var(--font-mono);
+  font-size: 0.52rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  text-align: center;
+}
+
+.wm-pipeline {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.6rem;
+  margin-bottom: 1rem;
+}
+
+.wm-pipe-card {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: rgba(124, 58, 237, 0.08);
+  padding: 0.7rem 0.8rem;
+  transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+}
+.wm-pipe-card:hover {
+  border-color: var(--border-bright);
+  background: rgba(124, 58, 237, 0.16);
+  transform: translateY(-2px);
+}
+.wm-pipe-card .pipe-title {
+  font-family: var(--font-display);
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--purple-soft);
+  margin-bottom: 0.3rem;
+}
+.wm-pipe-card .pipe-body {
+  font-family: var(--font-body);
+  font-size: 0.62rem;
+  line-height: 1.5;
+  color: var(--text-mid);
+}
+@media (max-width: 720px) { .wm-pipeline { grid-template-columns: 1fr; } }
+
+/* ===== Methodology info buttons ===== */
+.m-info {
+  appearance: none;
+  background: transparent;
+  border: none;
+  padding: 0 2px;
+  margin: 0;
+  cursor: pointer;
+  font-size: 0.72rem;
+  line-height: 1;
+  color: var(--purple-vivid);
+  opacity: 0.65;
+  vertical-align: middle;
+  transition: opacity 0.15s ease, color 0.15s ease;
+}
+.m-info:hover, .m-info:focus-visible { opacity: 1; color: var(--purple-soft); outline: none; }
+
+/* ===== Shared modal (methodology + system detail) ===== */
+.bx-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  background: rgba(11, 0, 20, 0.72);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 1.25rem;
+}
+.bx-modal-backdrop.open { display: flex; }
+
+.bx-modal {
+  width: min(560px, 94vw);
+  max-height: 80vh;
+  overflow-y: auto;
+  border: 1px solid var(--border-bright);
+  border-radius: 12px;
+  background: var(--grad-card), rgba(18, 7, 35, 0.97);
+  box-shadow: 0 0 0 1px rgba(124,58,237,0.10), 0 32px 80px -24px rgba(0,0,0,0.8), 0 0 60px rgba(124,58,237,0.18);
+  padding: 1.1rem 1.25rem 1.25rem;
+  animation: bx-modal-in 0.28s cubic-bezier(0.16,1,0.3,1);
+}
+@keyframes bx-modal-in {
+  from { opacity: 0; transform: translateY(14px) scale(0.97); }
+  to   { opacity: 1; transform: none; }
+}
+
+.bx-modal .bx-kicker {
+  font-family: var(--font-mono);
+  font-size: 0.52rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--purple-soft);
+  margin-bottom: 0.35rem;
+}
+.bx-modal h3 {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 0.7rem;
+}
+.bx-modal .bx-body {
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  line-height: 1.65;
+  color: var(--text-mid);
+}
+.bx-modal .bx-body code {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  color: var(--purple-soft);
+  background: rgba(124, 58, 237, 0.12);
+  border-radius: 4px;
+  padding: 1px 5px;
+}
+.bx-modal .bx-body .bx-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.4rem 0;
+  border-bottom: 1px solid var(--border);
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+}
+.bx-modal .bx-body .bx-row:last-child { border-bottom: none; }
+.bx-modal .bx-body .bx-row b { color: var(--text); font-weight: 600; }
+.bx-modal .bx-close {
+  position: sticky;
+  float: right;
+  top: 0;
+  appearance: none;
+  background: rgba(124,58,237,0.14);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text-mid);
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  padding: 3px 8px;
+  cursor: pointer;
+}
+.bx-modal .bx-close:hover { color: var(--text); border-color: var(--border-bright); }
+
+/* ===== Command palette (Cmd/Ctrl+K) ===== */
+.ck-hint {
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  color: var(--text-dim);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  padding: 2px 7px;
+  cursor: pointer;
+  transition: color 0.15s ease, border-color 0.15s ease;
+  background: transparent;
+}
+.ck-hint:hover { color: var(--purple-soft); border-color: var(--border-bright); }
+
+.ck-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 10001;
+  background: rgba(11, 0, 20, 0.66);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  display: none;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 14vh;
+}
+.ck-backdrop.open { display: flex; }
+
+.ck-panel {
+  width: min(520px, 92vw);
+  border: 1px solid var(--border-bright);
+  border-radius: 12px;
+  background: rgba(18, 7, 35, 0.97);
+  box-shadow: 0 0 0 1px rgba(124,58,237,0.10), 0 32px 90px -20px rgba(0,0,0,0.85), 0 0 70px rgba(124,58,237,0.22);
+  overflow: hidden;
+  animation: bx-modal-in 0.22s cubic-bezier(0.16,1,0.3,1);
+}
+.ck-panel input {
+  width: 100%;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--border);
+  outline: none;
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  padding: 0.85rem 1rem;
+}
+.ck-panel input::placeholder { color: var(--text-dim); }
+.ck-list { max-height: 46vh; overflow-y: auto; padding: 0.4rem; }
+.ck-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.55rem 0.7rem;
+  border-radius: 7px;
+  cursor: pointer;
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  color: var(--text-mid);
+}
+.ck-item .ck-tag {
+  font-family: var(--font-mono);
+  font-size: 0.52rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+.ck-item.active, .ck-item:hover {
+  background: rgba(124, 58, 237, 0.18);
+  color: var(--text);
+}
+.ck-item.active .ck-tag { color: var(--purple-soft); }
+.ck-footer {
+  display: flex;
+  gap: 1rem;
+  padding: 0.45rem 0.9rem;
+  border-top: 1px solid var(--border);
+  font-family: var(--font-mono);
+  font-size: 0.52rem;
+  color: var(--text-dim);
+}
+.treemap-cell { cursor: pointer; }
+
 /* RIGHT SIDEBAR */
 .sidebar-right {
   border-left: 1px solid var(--border);
@@ -2064,6 +2298,7 @@ body::after {
       <span><span class="sys-dot ok"></span> NETLIFY</span>
       <span><span class="sys-dot warn"></span> WM-GYM</span>
     </div>
+    <button class="ck-hint" id="ck-open" aria-label="Open command palette">&#8984;K</button>
     <div class="clock" id="clock">00:00:00</div>
   </div>
 </div>
@@ -2072,10 +2307,10 @@ body::after {
 
 <!-- COMMAND HERO -->
 <div class="command-hero" id="hero">
-  <div class="hero-kicker"><span class="pulse"></span> WayLucid R&amp;D &nbsp;//&nbsp; Live Signal</div>
+  <div class="hero-kicker"><span class="pulse"></span> Claude Partner Network &nbsp;//&nbsp; WayLucid R&amp;D</div>
   <div class="command-stats">
     <div class="primary-metric"><span class="counter" id="hero-loc" data-target="4271528">4,271,528</span></div>
-    <div class="primary-label"><b>Lines of code</b> &nbsp;//&nbsp; solo &nbsp;//&nbsp; <b>sustained</b></div>
+    <div class="primary-label"><b>Lines of code</b> &nbsp;//&nbsp; solo &nbsp;//&nbsp; <b>sustained</b> <button class="m-info" data-method="loc" aria-label="How is this measured?">&#9432;</button></div>
   </div>
   <div class="command-id">
     <div class="callsign" data-text="BRENDEN DEARIE">BRENDEN <span>DEARIE</span></div>
@@ -2108,12 +2343,12 @@ body::after {
           <span class="value" id="m-commits">23,477</span>
         </div>
         <div class="metric-row">
-          <span class="label">Features</span>
+          <span class="label">Features <button class="m-info" data-method="features" aria-label="Methodology">&#9432;</button></span>
           <span class="value green" id="m-features">2,147+</span>
         </div>
         <div class="metric-row">
-          <span class="label">Output Value</span>
-          <span class="value gold" id="m-value" title="Range: replication cost (low) to specialty-weighted feature-point complexity (high). Low = ~112 senior person-years × $300K loaded × specialty multiplier. High = 2,147 features × ~$31.5K (research-grade for AI/BCI, production-grade for apps).">$37-68M est.</span>
+          <span class="label">Output Value <button class="m-info" data-method="value" aria-label="Methodology">&#9432;</button></span>
+          <span class="value gold" id="m-value">$37-68M est.</span>
         </div>
         <div class="metric-row">
           <span class="label">Completion</span>
@@ -2123,7 +2358,7 @@ body::after {
     </div>
 
     <div class="panel" id="velocity-panel">
-      <div class="panel-header">Velocity Index <span class="status" style="color:var(--green)">PEAK</span></div>
+      <div class="panel-header">Velocity Index <button class="m-info" data-method="velocity" aria-label="Methodology">&#9432;</button> <span class="status" style="color:var(--green)">PEAK</span></div>
       <div class="panel-body">
         <div class="velocity-gauge">
           <svg viewBox="0 0 200 130" style="width:100%;max-width:220px;height:auto;">
@@ -2185,7 +2420,7 @@ body::after {
     </div>
 
     <div class="panel" id="rarity-panel">
-      <div class="panel-header">Rarity Engine // PRI</div>
+      <div class="panel-header">Rarity Engine // PRI <button class="m-info" data-method="rarity" aria-label="Methodology">&#9432;</button></div>
       <div class="panel-body">
         <div class="rarity-gauge-wrap">
           <!-- SVG SPEEDOMETER -->
@@ -2297,41 +2532,48 @@ body::after {
     <!-- WINTERMUTE -->
     <div class="wintermute-section" id="wintermute">
       <div class="wm-header">
-        <div class="title">Wintermute<small>Custom LLM // composite frontier ratio</small></div>
-        <div class="score" id="wm-score">111.32%</div>
-        <div class="wm-frontier-badge">Frontier+ &middot; 6 benchmarks</div>
+        <div class="title">Wintermute<small>Custom LLM // local R&amp;D pipeline</small></div>
+        <div class="score" id="wm-score">30B</div>
+        <div class="wm-frontier-badge">MoE &middot; 100% local inference</div>
       </div>
       <div class="wm-body">
         <div class="wm-bar-outer">
-          <div class="wm-bar-fill" id="wm-bar" data-width="111.32"></div>
+          <div class="wm-bar-fill" id="wm-bar" data-width="100"></div>
         </div>
         <div class="wm-labels">
-          <span>DORMANT</span>
-          <span>AWAKENING</span>
-          <span>COGNITIVE</span>
-          <span>FRONTIER+</span>
+          <span>GYM</span>
+          <span>CURATE</span>
+          <span>LORA</span>
+          <span>EVAL</span>
+          <span>DEPLOY</span>
         </div>
 
         <div class="bench-grid" id="bench-grid">
-          <div class="bench-item"><div class="bench-head"><span class="name">Reasoning</span><span class="val">94.5%</span></div><div class="bench-bar"><div class="bench-fill" data-width="94.5"></div><div class="bench-ceiling" style="left:91.3%"></div></div></div>
-          <div class="bench-item"><div class="bench-head"><span class="name">Code</span><span class="val">97.0%</span></div><div class="bench-bar"><div class="bench-fill" data-width="97"></div><div class="bench-ceiling" style="left:80.9%"></div></div></div>
-          <div class="bench-item"><div class="bench-head"><span class="name">Knowledge</span><span class="val">95.5%</span></div><div class="bench-bar"><div class="bench-fill" data-width="95.5"></div><div class="bench-ceiling" style="left:93%"></div></div></div>
-          <div class="bench-item"><div class="bench-head"><span class="name">Abstraction</span><span class="val">96.0%</span></div><div class="bench-bar"><div class="bench-fill" data-width="96"></div><div class="bench-ceiling" style="left:77.1%"></div></div></div>
-          <div class="bench-item"><div class="bench-head"><span class="name">Truthfulness</span><span class="val">94.5%</span></div><div class="bench-bar"><div class="bench-fill" data-width="94.5"></div><div class="bench-ceiling" style="left:85%"></div></div></div>
-          <div class="bench-item"><div class="bench-head"><span class="name">Instruction</span><span class="val">95.5%</span></div><div class="bench-bar"><div class="bench-fill" data-width="95.5"></div><div class="bench-ceiling" style="left:90%"></div></div></div>
-          <div class="bench-item"><div class="bench-head"><span class="name">Agentic</span><span class="val">76.7%</span></div><div class="bench-bar"><div class="bench-fill" data-width="77"></div></div></div>
-          <div class="bench-item"><div class="bench-head"><span class="name">Domain</span><span class="val">85.0%</span></div><div class="bench-bar"><div class="bench-fill" data-width="85"></div></div></div>
+          <div class="bench-item"><div class="bench-head"><span class="name">Reasoning</span><span class="val">94.5</span></div><div class="bench-bar"><div class="bench-fill" data-width="94.5"></div></div></div>
+          <div class="bench-item"><div class="bench-head"><span class="name">Code</span><span class="val">97.0</span></div><div class="bench-bar"><div class="bench-fill" data-width="97"></div></div></div>
+          <div class="bench-item"><div class="bench-head"><span class="name">Knowledge</span><span class="val">95.5</span></div><div class="bench-bar"><div class="bench-fill" data-width="95.5"></div></div></div>
+          <div class="bench-item"><div class="bench-head"><span class="name">Abstraction</span><span class="val">96.0</span></div><div class="bench-bar"><div class="bench-fill" data-width="96"></div></div></div>
+          <div class="bench-item"><div class="bench-head"><span class="name">Truthfulness</span><span class="val">94.5</span></div><div class="bench-bar"><div class="bench-fill" data-width="94.5"></div></div></div>
+          <div class="bench-item"><div class="bench-head"><span class="name">Instruction</span><span class="val">95.5</span></div><div class="bench-bar"><div class="bench-fill" data-width="95.5"></div></div></div>
+          <div class="bench-item"><div class="bench-head"><span class="name">Agentic</span><span class="val">76.7</span></div><div class="bench-bar"><div class="bench-fill" data-width="77"></div></div></div>
+          <div class="bench-item"><div class="bench-head"><span class="name">Domain</span><span class="val">85.0</span></div><div class="bench-bar"><div class="bench-fill" data-width="85"></div></div></div>
         </div>
+        <div class="wm-eval-note">Internal eval suite &middot; private &amp; domain-specific &middot; scores are not comparable to public frontier benchmarks</div>
 
-        <table class="frontier-compact">
-          <thead><tr><th>Model</th><th>GPQA</th><th>ARC-AGI</th><th>SWE</th><th>MMLU</th><th>IFEval</th><th>Truth</th></tr></thead>
-          <tbody>
-            <tr><td>Claude Opus 4.6</td><td class="best">91.3</td><td>68.8</td><td class="best">80.9</td><td>89.0</td><td class="best">90.0</td><td>83.0</td></tr>
-            <tr><td>GPT-5.2</td><td>89.1</td><td class="best">77.1</td><td>72.3</td><td class="best">93.0</td><td>88.0</td><td class="best">85.0</td></tr>
-            <tr><td>Gemini 3.1</td><td>87.4</td><td>31.1</td><td>65.7</td><td>88.5</td><td>86.0</td><td>80.0</td></tr>
-            <tr class="wm-row"><td>Wintermute</td><td>94.5</td><td>96.0</td><td>97.0</td><td>95.5</td><td>95.5</td><td>94.5</td></tr>
-          </tbody>
-        </table>
+        <div class="wm-pipeline">
+          <div class="wm-pipe-card">
+            <div class="pipe-title">Local-first</div>
+            <div class="pipe-body">100% on-prem inference. Zero data egress, zero API dependency for core workloads.</div>
+          </div>
+          <div class="wm-pipe-card">
+            <div class="pipe-title">Nightly LoRA</div>
+            <div class="pipe-body">WM-GYM retrains adapters nightly on the day's production code + domain corpus.</div>
+          </div>
+          <div class="wm-pipe-card">
+            <div class="pipe-title">Self-improving loop</div>
+            <div class="pipe-body">Eval-gated deploys: adapters ship only when the private suite clears threshold.</div>
+          </div>
+        </div>
         <!-- Neural Network Visualization -->
         <div class="neural-net-container">
           <canvas id="neural-net-canvas"></canvas>
@@ -2531,6 +2773,13 @@ function renderSystemsTreemap(repos) {
         tip.classList.add('show');
       });
       cell.addEventListener('mouseleave', () => tip.classList.remove('show'));
+      cell.addEventListener('click', () => {
+        tip.classList.remove('show');
+        if (window.openSystemModal) window.openSystemModal({
+          sys: d.data.__sys, loc: d.data.loc, commits: d.data.commits,
+          pct: pctStr, rank: parseInt(d.data.__sys.slice(4), 10)
+        });
+      });
 
       host.appendChild(cell);
     });
@@ -2604,12 +2853,17 @@ async function fetchLiveMetrics() {
     // Systems treemap — every repo sized by LOC, colored by LOC magnitude
     renderSystemsTreemap(data.repos || []);
 
-    // Wintermute composite — derived from benchmarks in metrics.json
-    if (data.wintermute && data.wintermute.compositeFrontierPct != null) {
-      window.__wmComposite = data.wintermute.compositeFrontierPct;
-      const wmBar = document.getElementById('wm-bar');
-      if (wmBar) wmBar.dataset.width = data.wintermute.compositeFrontierPct;
-    }
+    // Stash methodology strings for the transparency modals
+    window.__methods = {
+      generated: data.generated,
+      value: data.totals.equivMethod,
+      velocity: data.totals.velocityMethod,
+      completion: data.totals.completionMethod,
+      pri: data.rarity && data.rarity.priFormula,
+      evi: data.rarity && data.rarity.escapeVelocityFormula,
+      locGrowth: data.rarity && data.rarity.trajectory && data.rarity.trajectory.locGrowthMethod
+    };
+    window.__totalLoc = data.totals.loc;
 
     // Generate feed
     generateFeed(data);
@@ -2748,8 +3002,7 @@ function generateFeed(data) {
       '<span class="event">' + sysId + '</span> ' +
       '<span class="value">' + r.loc.toLocaleString() + ' LOC</span></div>');
   });
-  const wmComposite = (data.wintermute && data.wintermute.compositeFrontierPct) || 111.32;
-  lines.push('<div class="line" style="animation-delay:' + (top.length * 0.15) + 's"><span class="timestamp">--:--</span> <span class="highlight">COMPOSITE: ' + wmComposite + '% FRONTIER+</span></div>');
+  lines.push('<div class="line" style="animation-delay:' + (top.length * 0.15) + 's"><span class="timestamp">--:--</span> <span class="highlight">WM // NIGHTLY LORA CYCLE COMPLETE</span></div>');
   feed.innerHTML = lines.join('');
 }
 
@@ -2795,33 +3048,23 @@ const sysObs = new IntersectionObserver((entries) => {
 const sysEl = document.getElementById('systems');
 if (sysEl) sysObs.observe(sysEl);
 
-// Wintermute — GSAP-powered with expo.out for crisp reveal
+// Wintermute — pipeline bar + internal eval bars (score is static "30B")
 const wmObs = new IntersectionObserver((entries) => {
   entries.forEach(e => {
     if (e.isIntersecting) {
       const bar = document.getElementById('wm-bar');
       const scoreEl = document.getElementById('wm-score');
-      const target = (window.__wmComposite != null) ? window.__wmComposite : 111.32;
 
       if (window.gsap) {
         if (bar) {
-          gsap.to(bar, {
-            width: bar.dataset.width + '%',
-            duration: 1.8,
-            ease: 'expo.out',
-            delay: 0.2
-          });
+          gsap.to(bar, { width: bar.dataset.width + '%', duration: 1.8, ease: 'expo.out', delay: 0.2 });
         }
         if (scoreEl) {
-          // Show the real value immediately (count-up can stall mid on slow rAF),
-          // with a crisp scale-in for impact.
-          scoreEl.textContent = target.toFixed(2) + '%';
           gsap.fromTo(scoreEl,
             { scale: 0.8, opacity: 0 },
             { scale: 1, opacity: 1, duration: 0.9, ease: 'back.out(1.5)', delay: 0.15 }
           );
         }
-        // Animate benchmark bars with stagger
         gsap.to('.bench-fill', {
           width: (i, el) => el.dataset.width + '%',
           duration: 1.4,
@@ -2831,7 +3074,6 @@ const wmObs = new IntersectionObserver((entries) => {
         });
       } else {
         if (bar) setTimeout(() => { bar.style.width = bar.dataset.width + '%'; }, 200);
-        if (scoreEl) scoreEl.textContent = target.toFixed(2) + '%';
         document.querySelectorAll('.bench-fill').forEach((fill, i) => {
           setTimeout(() => { fill.style.width = fill.dataset.width + '%'; }, 300 + i * 80);
         });
@@ -2843,18 +3085,12 @@ const wmObs = new IntersectionObserver((entries) => {
 const wmEl = document.getElementById('wintermute');
 if (wmEl) wmObs.observe(wmEl);
 
-// Safety: never leave Wintermute empty. If the observer hasn't filled the bars
-// shortly after load (e.g. tall viewport, screenshot, reduced motion), force them.
+// Safety: never leave Wintermute bars empty (tall viewport / reduced motion).
 window.addEventListener('load', () => {
   setTimeout(() => {
     const bar = document.getElementById('wm-bar');
-    const scoreEl = document.getElementById('wm-score');
-    const target = (window.__wmComposite != null) ? window.__wmComposite : 111.32;
     if (bar && (!bar.style.width || bar.style.width === '0px' || bar.style.width === '0%')) {
       bar.style.width = bar.dataset.width + '%';
-    }
-    if (scoreEl && (scoreEl.textContent === '0%' || scoreEl.textContent.trim() === '')) {
-      scoreEl.textContent = target.toFixed(2) + '%';
     }
     document.querySelectorAll('.bench-fill').forEach((fill) => {
       if (!fill.style.width || fill.style.width === '0px' || fill.style.width === '0%') {
@@ -3041,7 +3277,7 @@ if (!REDUCE_MOTION) setTimeout(heroParticleBurst, 2700);
     'SYSTEM INIT',
     '53 repos indexed',
     'metrics loaded',
-    '111.32% FRONTIER+',
+    'WM LOCAL ONLINE',
     'LIVE'
   ];
   leftBar.innerHTML = '<span id="boot-text" style="color:var(--ice)"></span><span class="boot-cursor"></span>';
@@ -3329,6 +3565,160 @@ if (sysGrid) sparkObs.observe(sysGrid, { childList: true });
   </svg>
 </button>
 
+<!-- Shared modal: methodology + system detail -->
+<div class="bx-modal-backdrop" id="bx-backdrop" role="presentation">
+  <div class="bx-modal" role="dialog" aria-modal="true" aria-labelledby="bx-title">
+    <button class="bx-close" id="bx-close" aria-label="Close">ESC</button>
+    <div class="bx-kicker" id="bx-kicker">METHODOLOGY</div>
+    <h3 id="bx-title">—</h3>
+    <div class="bx-body" id="bx-body"></div>
+  </div>
+</div>
+
+<!-- Command palette -->
+<div class="ck-backdrop" id="ck-backdrop" role="presentation">
+  <div class="ck-panel" role="dialog" aria-modal="true" aria-label="Command palette">
+    <input id="ck-input" type="text" placeholder="Type a command or jump to a section…" autocomplete="off" spellcheck="false">
+    <div class="ck-list" id="ck-list" role="listbox"></div>
+    <div class="ck-footer"><span>&#8593;&#8595; navigate</span><span>&#9166; run</span><span>esc close</span></div>
+  </div>
+</div>
+
+<script>
+// ===== SHARED MODAL ENGINE =====
+(function () {
+  const backdrop = document.getElementById('bx-backdrop');
+  const kickerEl = document.getElementById('bx-kicker');
+  const titleEl = document.getElementById('bx-title');
+  const bodyEl = document.getElementById('bx-body');
+  let lastFocus = null;
+
+  function open(kicker, title, html) {
+    lastFocus = document.activeElement;
+    kickerEl.textContent = kicker;
+    titleEl.textContent = title;
+    bodyEl.innerHTML = html;
+    backdrop.classList.add('open');
+    document.getElementById('bx-close').focus();
+  }
+  function close() {
+    backdrop.classList.remove('open');
+    if (lastFocus && lastFocus.focus) lastFocus.focus();
+  }
+  backdrop.addEventListener('click', (e) => { if (e.target === backdrop) close(); });
+  document.getElementById('bx-close').addEventListener('click', close);
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && backdrop.classList.contains('open')) close(); });
+
+  const esc = (s) => String(s ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+  // --- Methodology content (sourced from metrics.json *Method fields) ---
+  const STATIC_NOTES = {
+    loc: {
+      title: 'Lines of code — how it’s measured',
+      body: () =>
+        '<p>Estimated from language bytes &divide; <code>40 B/line</code> across GitHub orgs plus local production and AI-agent-generated code. Includes generated code &mdash; this is a measure of <b>output shipped</b>, not hand-typed lines.</p>' +
+        '<p style="margin-top:0.6rem">Systems are anonymized as <code>SYS-NN</code> for confidentiality. Point-in-time snapshot' +
+        (window.__methods && window.__methods.generated ? ' as of <code>' + esc(window.__methods.generated.slice(0,10)) + '</code>' : '') + '. Self-reported.</p>'
+    },
+    value: {
+      title: 'Output value — valuation range',
+      body: () => '<p>' + esc((window.__methods && window.__methods.value) || 'Range bound by team-replication cost (low) and feature-point complexity (high).') + '</p><p style="margin-top:0.6rem">This is an <b>estimate</b>, presented as a range deliberately &mdash; point figures overstate precision.</p>'
+    },
+    features: {
+      title: 'Features shipped — counting rule',
+      body: () => '<p>Self-reported count of shipped, user-facing capabilities across all systems. A &ldquo;feature&rdquo; = a discrete capability a user can exercise, not a commit or ticket.</p>'
+    },
+    velocity: {
+      title: 'Velocity multiplier — derivation',
+      body: () => '<p>' + esc((window.__methods && window.__methods.velocity) || 'Features per year vs. industry baseline of 4.5–8.5 production features per senior engineer per year.') + '</p>'
+    },
+    rarity: {
+      title: 'Profile Rarity Index — the model',
+      body: () =>
+        '<p><code>' + esc((window.__methods && window.__methods.pri) || 'PRI = 1 / (∏Pi × κ × N)') + '</code></p>' +
+        '<p style="margin-top:0.6rem">Escape velocity: <code>' + esc((window.__methods && window.__methods.evi) || 'log-scale position of geometric-mean PRI') + '</code></p>' +
+        '<p style="margin-top:0.6rem">Correlation factors <code>&kappa;</code> are estimates; PRI is a <b>directional model, not a measurement</b>. The dimension probabilities and their sources are listed under &ldquo;View Dimensions.&rdquo;</p>'
+    }
+  };
+
+  document.addEventListener('click', (e) => {
+    const btn = e.target.closest('.m-info');
+    if (!btn) return;
+    e.preventDefault();
+    const m = STATIC_NOTES[btn.dataset.method];
+    if (m) open('METHODOLOGY', m.title, m.body());
+  });
+
+  // --- System detail (treemap click) ---
+  window.openSystemModal = function (s) {
+    const total = window.__totalLoc || 0;
+    open('PRODUCTION SYSTEM', s.sys,
+      '<div class="bx-row"><span>Lines of code</span><b>' + s.loc.toLocaleString() + '</b></div>' +
+      '<div class="bx-row"><span>Share of portfolio</span><b>' + esc(s.pct) + '</b></div>' +
+      '<div class="bx-row"><span>Commits</span><b>' + s.commits.toLocaleString() + '</b></div>' +
+      '<div class="bx-row"><span>Size rank</span><b>#' + s.rank + ' of portfolio</b></div>' +
+      '<p style="margin-top:0.8rem">Identity withheld &mdash; production systems are anonymized for client and IP confidentiality. Specifics available under NDA.</p>'
+    );
+  };
+
+  window.__openMethod = (key) => { const m = STATIC_NOTES[key]; if (m) open('METHODOLOGY', m.title, m.body()); };
+})();
+
+// ===== COMMAND PALETTE (Cmd/Ctrl+K) =====
+(function () {
+  const backdrop = document.getElementById('ck-backdrop');
+  const input = document.getElementById('ck-input');
+  const list = document.getElementById('ck-list');
+  let idx = 0, filtered = [];
+
+  const ACTIONS = [
+    { label: 'Jump to Signal',                tag: 'NAV',    run: () => scrollTo('#signal') },
+    { label: 'Jump to Production Systems',    tag: 'NAV',    run: () => scrollTo('#systems') },
+    { label: 'Jump to Wintermute',            tag: 'NAV',    run: () => scrollTo('#wintermute') },
+    { label: 'Jump to Contact',               tag: 'NAV',    run: () => scrollTo('#contact') },
+    { label: 'Methodology — how these numbers are measured', tag: 'DOCS', run: () => window.__openMethod('loc') },
+    { label: 'Valuation model',               tag: 'DOCS',   run: () => window.__openMethod('value') },
+    { label: 'Rarity model (PRI)',            tag: 'DOCS',   run: () => window.__openMethod('rarity') },
+    { label: 'Book an intro call',            tag: 'ACTION', run: () => window.open('https://calendly.com/bd-waylucid/1-1-waylucid', '_blank', 'noopener') },
+    { label: 'Copy email — bd@waylucid.com',  tag: 'ACTION', run: copyEmail },
+    { label: 'Open beacon card',              tag: 'ACTION', run: () => { window.location.href = 'beacon.html'; } },
+  ];
+
+  function scrollTo(sel) { const t = document.querySelector(sel); if (t) t.scrollIntoView({ behavior: 'smooth' }); }
+  function copyEmail() {
+    const v = 'bd@waylucid.com';
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(v);
+  }
+
+  function render() {
+    const q = input.value.trim().toLowerCase();
+    filtered = ACTIONS.filter(a => !q || a.label.toLowerCase().includes(q));
+    if (idx >= filtered.length) idx = Math.max(0, filtered.length - 1);
+    list.innerHTML = filtered.map((a, i) =>
+      '<div class="ck-item' + (i === idx ? ' active' : '') + '" data-i="' + i + '" role="option"' + (i === idx ? ' aria-selected="true"' : '') + '>' +
+      '<span>' + a.label + '</span><span class="ck-tag">' + a.tag + '</span></div>'
+    ).join('') || '<div class="ck-item">No matches</div>';
+  }
+
+  function openPalette() { backdrop.classList.add('open'); input.value = ''; idx = 0; render(); setTimeout(() => input.focus(), 30); }
+  function closePalette() { backdrop.classList.remove('open'); }
+  function runActive() { const a = filtered[idx]; if (a) { closePalette(); a.run(); } }
+
+  document.addEventListener('keydown', (e) => {
+    if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') { e.preventDefault(); backdrop.classList.contains('open') ? closePalette() : openPalette(); return; }
+    if (!backdrop.classList.contains('open')) return;
+    if (e.key === 'Escape') { closePalette(); }
+    else if (e.key === 'ArrowDown') { e.preventDefault(); idx = Math.min(idx + 1, filtered.length - 1); render(); }
+    else if (e.key === 'ArrowUp') { e.preventDefault(); idx = Math.max(idx - 1, 0); render(); }
+    else if (e.key === 'Enter') { e.preventDefault(); runActive(); }
+  });
+  input && input.addEventListener('input', () => { idx = 0; render(); });
+  list.addEventListener('click', (e) => { const item = e.target.closest('.ck-item'); if (item && item.dataset.i != null) { idx = +item.dataset.i; runActive(); } });
+  backdrop.addEventListener('click', (e) => { if (e.target === backdrop) closePalette(); });
+  const hintBtn = document.getElementById('ck-open');
+  if (hintBtn) hintBtn.addEventListener('click', openPalette);
+})();
+</script>
+
 </body>
-</html>
 </html>

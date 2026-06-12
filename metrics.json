@@ -1,5 +1,5 @@
 {
-  "generated": "2026-05-11T00:00:00Z",
+  "generated": "2026-06-11T00:00:00Z",
   "orgs": [
     "WL-MadHacker",
     "ProtocolGemini",
@@ -413,7 +413,7 @@
       },
       {
         "id": "custom_llm",
-        "label": "Custom LLM >111% Frontier",
+        "label": "Custom Local LLM in Production",
         "p": 0.0001,
         "rarity": 10000,
         "source": "HuggingFace Model Census",
@@ -450,45 +450,51 @@
     }
   },
   "wintermute": {
-    "compositeFrontierPct": 111.32,
-    "compositeFormula": "mean(score / frontier_ceiling) across benchmarks with published ceilings \u00d7 100",
-    "benchmarks": [
+    "model": "Qwen3-30B-A3B MoE fine-tune",
+    "inference": "100% local",
+    "training": "Nightly LoRA via WM-GYM; eval-gated deploys",
+    "evalNote": "Internal eval suite; private and domain-specific. Scores are not comparable to public frontier benchmarks.",
+    "internalEvals": [
       {
         "name": "Reasoning",
-        "score": 94.5,
-        "frontierCeiling": 91.3,
-        "ratio": 1.035
+        "score": 94.5
       },
       {
         "name": "Code",
-        "score": 97.0,
-        "frontierCeiling": 80.9,
-        "ratio": 1.199
+        "score": 97.0
       },
       {
         "name": "Knowledge",
-        "score": 95.5,
-        "frontierCeiling": 93.0,
-        "ratio": 1.0269
+        "score": 95.5
       },
       {
         "name": "Abstraction",
-        "score": 96.0,
-        "frontierCeiling": 77.1,
-        "ratio": 1.2451
+        "score": 96.0
       },
       {
         "name": "Truthfulness",
-        "score": 94.5,
-        "frontierCeiling": 85.0,
-        "ratio": 1.1118
+        "score": 94.5
       },
       {
         "name": "Instruction",
-        "score": 95.5,
-        "frontierCeiling": 90.0,
-        "ratio": 1.0611
+        "score": 95.5
+      },
+      {
+        "name": "Agentic",
+        "score": 76.7
+      },
+      {
+        "name": "Domain",
+        "score": 85.0
       }
     ]
-  }
+  },
+  "credentials": [
+    {
+      "name": "Claude Partner Network",
+      "issuer": "Anthropic",
+      "year": 2026,
+      "status": "Selected"
+    }
+  ]
 }
