@@ -13,7 +13,7 @@
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://wl-madhacker.github.io/beacon-dashboard/beacon.html">
 <meta property="og:title" content="BEACON // Brenden Dearie - AI-Native Developer">
-<meta property="og:description" content="25-48x velocity. 4.27M+ LOC. 2,147+ features. Solo operator. See the signal.">
+<meta property="og:description" content="25-48x velocity. 4.27M+ LOC est. 2,147+ features. Solo operator. See the signal.">
 <meta property="og:image" content="https://wl-madhacker.github.io/beacon-dashboard/og-image.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
@@ -559,7 +559,7 @@ body {
     </div>
     <div class="bm">
       <div class="bm-val" style="color: var(--purple-light);">$37-68M</div>
-      <div class="bm-label">Output Value</div>
+      <div class="bm-label">Output Value (est.)</div>
     </div>
   </div>
 
@@ -588,7 +588,7 @@ body {
     <div class="bci-radar-wrap">
       <canvas id="bciRadar"></canvas>
     </div>
-    <div class="bci-list">
+    <div class="bci-list" aria-label="Self-assessed operating profile">
       <div class="bci-row">
         <span class="bci-name">Throughput</span>
         <div class="bci-track"><div class="bci-fill" data-w="92" style="background: linear-gradient(90deg, var(--purple), var(--purple-soft)); box-shadow: 0 0 12px rgba(168,85,247,0.45);"></div></div>
@@ -632,7 +632,7 @@ body {
     <div class="traj-x">&times;</div>
     <div class="traj-comp">
       <h5 style="color:var(--purple-light);">Velocity</h5>
-      <p>18mo compound curve</p>
+      <p>12mo compound curve</p>
       <span class="tstat" style="color:var(--purple-light);border-color:var(--purple-light);">Growing</span>
     </div>
     <div class="traj-x">&times;</div>
@@ -690,18 +690,21 @@ body {
       1 / (<span class="cc">&prod;P<sub>i</sub></span> &times;
       <span class="vt">&kappa;</span> &times;
       <span class="et">N</span>)
-      &nbsp;&mdash;&nbsp; Profile Rarity Index
+      &nbsp;&mdash;&nbsp; Profile Rarity Index<div style="margin-top:6px;font-size:0.48rem;letter-spacing:0.12em;color:var(--text3);">DIRECTIONAL MODEL, NOT A MEASUREMENT &middot; PROBABILITIES ARE OWN ESTIMATES &middot; FULL METHODOLOGY ON THE COMMAND INTERFACE</div>
     </div>
   </div>
 
   <!-- FOOTER -->
   <div class="beacon-footer">
     <span class="bf-left">WayLucid Labs &bull; 2026</span>
-    <a href="mailto:brenden@waylucid.com" class="bf-cta">Initiate Contact</a>
+    <a href="mailto:bd@waylucid.com" class="bf-cta">Initiate Contact</a>
   </div>
 </div>
 
 <script>
+// Motion-preference gate for all JS-driven animation
+const BX_REDUCE = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+
 // Particles
 (function(){
   if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
@@ -715,7 +718,7 @@ body {
 // Animated counters (GSAP-powered when available, falls back to RAF)
 function animateVal(el, target, duration) {
   if (!el) return;
-  if (window.gsap) {
+  if (window.gsap && !BX_REDUCE) {
     const obj = { v: 0 };
     gsap.to(obj, {
       v: target,
@@ -748,7 +751,7 @@ function animateVal(el, target, duration) {
 // Trigger animations on load
 window.addEventListener('load', () => {
   // Entrance: cascade the beacon sections into view
-  if (window.gsap) {
+  if (window.gsap && !BX_REDUCE) {
     gsap.from('.beacon-header, .beacon-identity, .beacon-metrics, .beacon-velocity, .beacon-bci, .beacon-trajectory, .beacon-stack, .beacon-rarity, .beacon-formula, .beacon-footer', {
       y: 22,
       opacity: 0,
@@ -785,7 +788,7 @@ window.addEventListener('load', () => {
   setTimeout(() => {
     const vf = document.getElementById('vel-fill');
     if (vf) {
-      if (window.gsap) {
+      if (window.gsap && !BX_REDUCE) {
         gsap.to(vf, { width: '76%', duration: 1.6, ease: 'expo.out' }); // ~36x of 48x scale (mid of 25-48x range)
       } else {
         vf.style.width = '76%';
@@ -830,6 +833,7 @@ if (ctx) {
       }]
     },
     options: {
+      animation: (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) ? false : undefined,
       responsive: true,
       maintainAspectRatio: true,
       scales: {

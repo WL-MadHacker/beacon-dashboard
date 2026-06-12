@@ -7,26 +7,26 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <title>BRENDEN DEARIE // Command Interface</title>
-<meta name="description" content="AI-Native Developer — 4.27M+ LOC, 53 repos, solo operator. See the signal.">
+<meta name="description" content="AI-Native Developer — 4.27M+ LOC est., 50 repos, solo operator. See the signal.">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="canonical" href="https://wl-madhacker.github.io/beacon-dashboard/">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://wl-madhacker.github.io/beacon-dashboard/">
 <meta property="og:title" content="Brenden Dearie — AI-Native Developer">
-<meta property="og:description" content="4.27M+ LOC. 53 repos. 23K+ commits. $37-68M output. Solo operator. Command interface.">
+<meta property="og:description" content="4.27M+ LOC est. 50 repos. 23K+ commits. $37-68M est. output. Solo operator. Command interface.">
 <meta property="og:image" content="https://wl-madhacker.github.io/beacon-dashboard/og-image.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Brenden Dearie — AI-Native Developer">
-<meta name="twitter:description" content="4.27M+ LOC. 53 repos. 25-48x velocity. Solo operator.">
+<meta name="twitter:description" content="4.27M+ LOC est. 50 repos. 25-48x velocity. Solo operator.">
 <meta name="twitter:image" content="https://wl-madhacker.github.io/beacon-dashboard/og-image.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+<script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
 <style>
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -1229,48 +1229,6 @@ body::after {
   background: var(--text-dim);
 }
 
-/* Frontier table */
-.frontier-compact {
-  width: 100%;
-  border-collapse: collapse;
-  font-family: var(--font-mono);
-  font-size: 0.55rem;
-  margin-top: 1rem;
-}
-
-.frontier-compact th {
-  padding: 0.4rem 0.3rem;
-  text-align: center;
-  border-bottom: 1px solid var(--border);
-  color: var(--text-dim);
-  font-weight: 500;
-  font-size: 0.45rem;
-  letter-spacing: 1px;
-}
-
-.frontier-compact th:first-child { text-align: left; }
-
-.frontier-compact td {
-  padding: 0.35rem 0.3rem;
-  text-align: center;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.03);
-  color: var(--text-dim);
-  font-size: 0.55rem;
-}
-
-.frontier-compact td:first-child {
-  text-align: left;
-  color: var(--text-mid);
-}
-
-.frontier-compact .wm-row td {
-  color: var(--ice);
-  font-weight: 700;
-  border-top: 1px solid var(--border);
-}
-
-.frontier-compact .best { color: var(--gold); font-weight: 700; }
-
 /* ===== WM eval note + pipeline cards ===== */
 .wm-eval-note {
   margin: 0.6rem 0 1rem;
@@ -1331,7 +1289,19 @@ body::after {
   vertical-align: middle;
   transition: opacity 0.15s ease, color 0.15s ease;
 }
-.m-info:hover, .m-info:focus-visible { opacity: 1; color: var(--purple-soft); outline: none; }
+.m-info:hover { opacity: 1; color: var(--purple-soft); }
+.m-info:focus-visible {
+  opacity: 1;
+  color: var(--purple-soft);
+  outline: 2px solid var(--purple-soft);
+  outline-offset: 2px;
+  border-radius: 3px;
+}
+.treemap-cell:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: -2px;
+  z-index: 6;
+}
 
 /* ===== Shared modal (methodology + system detail) ===== */
 .bx-modal-backdrop {
@@ -1591,18 +1561,19 @@ body::after {
   position: fixed;
   bottom: 0; left: 0; right: 0;
   z-index: 100;
-  height: 24px;
-  background: rgba(255, 255, 255, 0.75);
+  height: 26px;
+  background: rgba(11, 0, 20, 0.78);
   border-top: 1px solid var(--border);
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0 1rem;
   font-family: var(--font-mono);
-  font-size: 0.45rem;
+  font-size: 0.6rem;
   color: var(--text-dim);
   letter-spacing: 1px;
   backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
 }
 
 .status-bar .left, .status-bar .right {
@@ -1954,18 +1925,18 @@ body::after {
   const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
   renderer.setSize(window.innerWidth, window.innerHeight);
-  renderer.setClearColor(0xf4f5f7, 0);
+  renderer.setClearColor(0x0B0014, 0);
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
   renderer.toneMappingExposure = 1.0;
 
   const scene = new THREE.Scene();
-  scene.fog = new THREE.FogExp2(0xf4f5f7, 0.015);
+  scene.fog = new THREE.FogExp2(0x0B0014, 0.015);
   const camera = new THREE.PerspectiveCamera(55, window.innerWidth / window.innerHeight, 0.1, 1000);
   camera.position.set(0, 2, 35);
 
-  const ICE = 0x2a6f8a;
-  const ICE_DIM = 0x5a9ab0;
-  const GOLD = 0xb08630;
+  const ICE = 0xA855F7;       // brand purple-light (was light-theme teal)
+  const ICE_DIM = 0x8B5CF6;   // brand purple-vivid
+  const GOLD = 0xC084FC;      // brand lavender (was light-theme gold)
 
   // === CENTRAL SPHERE — Glowing core ===
   const coreGeo = new THREE.SphereGeometry(1.8, 64, 64);
@@ -2294,9 +2265,9 @@ body::after {
   </div>
   <div class="topbar-right">
     <div class="topbar-sys">
-      <span><span class="sys-dot ok"></span> GITHUB</span>
-      <span><span class="sys-dot ok"></span> NETLIFY</span>
-      <span><span class="sys-dot warn"></span> WM-GYM</span>
+      <a href="https://github.com/WL-MadHacker" target="_blank" rel="noopener" style="color:inherit;text-decoration:none;">GITHUB</a>
+      <span>NETLIFY</span>
+      <span>WM-GYM</span>
     </div>
     <button class="ck-hint" id="ck-open" aria-label="Open command palette">&#8984;K</button>
     <div class="clock" id="clock">00:00:00</div>
@@ -2327,7 +2298,7 @@ body::after {
     <div class="panel" id="signal">
       <div class="panel-header">
         Core Metrics
-        <span class="status">LIVE</span>
+        <span class="status">SNAPSHOT</span>
       </div>
       <div class="panel-body">
         <div class="metric-row">
@@ -2374,9 +2345,9 @@ body::after {
               </filter>
             </defs>
             <!-- Outer ring -->
-            <path d="M 20 110 A 80 80 0 0 1 180 110" fill="none" stroke="rgba(0,0,0,0.04)" stroke-width="12" stroke-linecap="round"/>
+            <path d="M 20 110 A 80 80 0 0 1 180 110" fill="none" stroke="rgba(124,58,237,0.10)" stroke-width="12" stroke-linecap="round"/>
             <!-- Track -->
-            <path d="M 20 110 A 80 80 0 0 1 180 110" fill="none" stroke="rgba(0,0,0,0.08)" stroke-width="5" stroke-linecap="round"/>
+            <path d="M 20 110 A 80 80 0 0 1 180 110" fill="none" stroke="rgba(124,58,237,0.18)" stroke-width="5" stroke-linecap="round"/>
             <!-- Fill -->
             <path class="gauge-fill" id="gauge-arc" d="M 20 110 A 80 80 0 0 1 180 110" fill="none" stroke="url(#gaugeGrad)" stroke-width="5" stroke-linecap="round" filter="url(#velGlow)"/>
             <!-- Tick marks -->
@@ -2401,7 +2372,7 @@ body::after {
               </circle>
             </g>
             <!-- Center hub -->
-            <circle cx="100" cy="110" r="6" fill="#1E0A3C" stroke="rgba(0,0,0,0.12)" stroke-width="1.5"/>
+            <circle cx="100" cy="110" r="6" fill="#1E0A3C" stroke="rgba(168,85,247,0.35)" stroke-width="1.5"/>
             <circle cx="100" cy="110" r="2.5" fill="#A855F7" opacity="0.5">
               <animate attributeName="opacity" values="0.3;0.7;0.3" dur="2s" repeatCount="indefinite"/>
             </circle>
@@ -2413,7 +2384,7 @@ body::after {
         <div class="velocity-stats">
           <div class="vel-stat"><span class="label">Output</span><span class="value green" id="vel-output">2,147+</span></div>
           <div class="vel-stat"><span class="label">Stack</span><span class="value" id="vel-stack">27+</span></div>
-          <div class="vel-stat"><span class="label">Daily</span><span class="value gold" id="vel-daily">~19.5K LOC</span></div>
+          <div class="vel-stat"><span class="label">Peak/day</span><span class="value gold" id="vel-daily">~19.5K LOC</span></div>
           <div class="vel-stat"><span class="label">Ship</span><span class="value green">CONT.</span></div>
         </div>
       </div>
@@ -2447,9 +2418,9 @@ body::after {
             <!-- 180°: (30,115)  150°: (42.1,70)  120°: (75,37.1)  90°: (120,25)  60°: (165,37.1)  30°: (197.9,70)  0°: (210,115) -->
 
             <!-- Outer shadow ring -->
-            <path d="M 20 115 A 100 100 0 0 1 220 115" fill="none" stroke="rgba(0,0,0,0.03)" stroke-width="16" stroke-linecap="round"/>
+            <path d="M 20 115 A 100 100 0 0 1 220 115" fill="none" stroke="rgba(124,58,237,0.08)" stroke-width="16" stroke-linecap="round"/>
             <!-- Outer ring -->
-            <path d="M 25 115 A 95 95 0 0 1 215 115" fill="none" stroke="rgba(0,0,0,0.05)" stroke-width="8" stroke-linecap="round"/>
+            <path d="M 25 115 A 95 95 0 0 1 215 115" fill="none" stroke="rgba(124,58,237,0.14)" stroke-width="8" stroke-linecap="round"/>
             <!-- Track -->
             <path class="gauge-track" d="M 30 115 A 90 90 0 0 1 210 115" stroke-width="4"/>
             <!-- Target zone (1B region) — from 30° to 0° -->
@@ -2483,8 +2454,8 @@ body::after {
               <animate attributeName="opacity" values="0.6;0.2;0.6" dur="2.5s" repeatCount="indefinite"/>
             </circle>
             <!-- Center hub layers -->
-            <circle cx="120" cy="115" r="8" fill="rgba(0,0,0,0.03)"/>
-            <circle cx="120" cy="115" r="6" fill="#1E0A3C" stroke="rgba(0,0,0,0.1)" stroke-width="1.5"/>
+            <circle cx="120" cy="115" r="8" fill="rgba(124,58,237,0.10)"/>
+            <circle cx="120" cy="115" r="6" fill="#1E0A3C" stroke="rgba(168,85,247,0.30)" stroke-width="1.5"/>
             <circle cx="120" cy="115" r="3" fill="#A855F7" opacity="0.4">
               <animate attributeName="opacity" values="0.3;0.6;0.3" dur="2s" repeatCount="indefinite"/>
             </circle>
@@ -2493,13 +2464,13 @@ body::after {
           <!-- Score readout -->
           <div class="rarity-score">
             <div class="pri-value" id="pri-display">1 in —</div>
-            <div class="pri-target" id="pri-trajectory">TRAJECTORY: 1 in 1B &bull; ACHIEVED</div>
+            <div class="pri-target" id="pri-trajectory">TRAJECTORY: 1 in 1B &bull; model est.</div>
           </div>
 
           <!-- Escape Velocity badge -->
           <div class="evi-badge">
             <div class="evi-dot"></div>
-            <span>ESCAPE VELOCITY: <span id="evi-value">72%</span></span>
+            <span>ESCAPE VELOCITY: <span id="evi-value">93%</span></span>
           </div>
         </div>
 
@@ -2524,7 +2495,7 @@ body::after {
     <div id="systems">
       <div class="systems-header">
         <span>Production Systems</span>
-        <span class="count" id="sys-count">53 repos</span>
+        <span class="count" id="sys-count">45 systems</span>
       </div>
       <div class="systems-grid" id="systems-grid"></div>
     </div>
@@ -2587,7 +2558,7 @@ body::after {
   <aside class="sidebar-right">
 
     <div class="panel">
-      <div class="panel-header">Activity Feed</div>
+      <div class="panel-header">Top Systems // Commits</div>
       <div class="panel-body">
         <div class="feed" id="feed"></div>
       </div>
@@ -2618,10 +2589,11 @@ body::after {
           <span class="stack-pill">WebGL</span>
           <span class="stack-pill">WebAudio</span>
           <span class="stack-pill primary">Claude</span>
-          <span class="stack-pill primary">GPT-4</span>
+          <span class="stack-pill primary">GPT-5</span>
           <span class="stack-pill primary">Qwen 3</span>
           <span class="stack-pill">LoRA</span>
           <span class="stack-pill">HuggingFace</span>
+          <span class="stack-pill">d3.js</span>
           <span class="stack-pill">BCI / Neurotech</span>
         </div>
       </div>
@@ -2631,10 +2603,10 @@ body::after {
       <div class="panel-header">WM Advantages</div>
       <div class="panel-body" style="font-family: var(--font-mono); font-size: 0.5rem; color: var(--text-dim); line-height: 1.8;">
         <div><span style="color: var(--green);">&#9679;</span> 100% Local inference</div>
-        <div><span style="color: var(--green);">&#9679;</span> Zero data leakage</div>
+        <div><span style="color: var(--green);">&#9679;</span> Zero data egress</div>
         <div><span style="color: var(--green);">&#9679;</span> Nightly LoRA via GYM</div>
         <div><span style="color: var(--green);">&#9679;</span> Domain specialist</div>
-        <div><span style="color: var(--green);">&#9679;</span> Half parameters</div>
+        <div><span style="color: var(--green);">&#9679;</span> Eval-gated deploys</div>
       </div>
     </div>
 
@@ -2650,8 +2622,8 @@ body::after {
 <!-- STATUS BAR -->
 <div class="status-bar">
   <div class="left">
-    <span class="live">LIVE</span>
-    <span id="status-repos">53 repos</span>
+    <span class="live">SNAPSHOT</span>
+    <span id="status-repos">50 repos</span>
     <span id="status-age">updated --</span>
   </div>
   <div class="right">
@@ -2665,6 +2637,15 @@ body::after {
 // Always open at the hero — never restore a prior scroll position
 if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
 window.addEventListener('load', () => window.scrollTo(0, 0));
+
+// Single motion-preference gate for ALL JS-driven animation (GSAP, canvas, SMIL).
+const REDUCE_MOTION = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+// SMIL <animate> ignores the CSS reduced-motion overrides — pause SVG timelines directly.
+if (REDUCE_MOTION) {
+  window.addEventListener('load', () => {
+    document.querySelectorAll('svg').forEach(s => { if (s.pauseAnimations) s.pauseAnimations(); });
+  });
+}
 
 // ===== TREEMAP: Production Systems sized by LOC, colored by LOC magnitude =====
 function renderSystemsTreemap(repos) {
@@ -2681,6 +2662,7 @@ function renderSystemsTreemap(repos) {
     d.__sys = 'SYS-' + String(i + 1).padStart(2, '0');
   });
   const totalLoc = data.reduce((s, d) => s + d.loc, 0);
+  let firstRender = true;
 
   const layout = () => {
     host.innerHTML = '';
@@ -2752,37 +2734,61 @@ function renderSystemsTreemap(repos) {
       if (area < 500)       cell.classList.add('micro');
       else if (area < 4500) cell.classList.add('tiny');
 
+      // Local/agent-generated buckets have no public git history — label them
+      // honestly instead of showing a contradictory "0 COMMITS".
+      const isLocal = !!d.data.localOnly || (d.data.commits === 0);
+      const commitsLine = isLocal
+        ? 'LOCAL &middot; UNSYNCED &middot; ' + pctStr
+        : d.data.commits.toLocaleString() + ' COMMITS &middot; ' + pctStr;
+      const commitsTip = isLocal ? 'local / no public git history' : d.data.commits.toLocaleString() + ' commits';
+
       cell.innerHTML =
         '<span class="tm-sheen"></span>' +
         '<div class="tm-name">' + d.data.__sys + '</div>' +
         '<div class="tm-foot">' +
           '<div class="tm-loc">' + d.data.loc.toLocaleString() + ' LOC</div>' +
-          '<div class="tm-commits">' + d.data.commits.toLocaleString() + ' COMMITS &middot; ' + pctStr + '</div>' +
+          '<div class="tm-commits">' + commitsLine + '</div>' +
         '</div>';
 
-      // Staggered entrance via pure CSS animation (no rAF dependency — the cell
-      // is guaranteed to end visible even if requestAnimationFrame is throttled).
-      cell.style.animationDelay = Math.min(i * 18, 650) + 'ms';
+      // Staggered CSS entrance on FIRST render only — re-layouts (e.g. mobile
+      // URL-bar resize events) must not blank and re-stagger the centerpiece.
+      if (firstRender) {
+        cell.style.animationDelay = Math.min(i * 18, 650) + 'ms';
+      } else {
+        cell.style.animation = 'none';
+      }
+
+      // Keyboard access: cells are real interactive controls.
+      cell.tabIndex = 0;
+      cell.setAttribute('role', 'button');
+      cell.setAttribute('aria-label', d.data.__sys + ': ' + d.data.loc.toLocaleString() + ' lines of code, ' +
+        (isLocal ? 'local unsynced' : d.data.commits.toLocaleString() + ' commits') + ', ' + pctStr + ' of portfolio. View details.');
+
+      const openDetail = () => {
+        tip.classList.remove('show');
+        if (window.openSystemModal) window.openSystemModal({
+          sys: d.data.__sys, loc: d.data.loc, commits: d.data.commits, localOnly: isLocal,
+          pct: pctStr, rank: parseInt(d.data.__sys.slice(4), 10)
+        });
+      };
 
       cell.addEventListener('mousemove', (e) => {
         tipName.textContent = d.data.__sys;
         tipLoc.textContent = d.data.loc.toLocaleString() + ' LOC · ' + pctStr + ' of output';
-        tipCommits.textContent = d.data.commits.toLocaleString() + ' commits';
+        tipCommits.textContent = commitsTip;
         tip.style.left = Math.min(window.innerWidth - 200, e.clientX + 14) + 'px';
         tip.style.top  = (e.clientY + 14) + 'px';
         tip.classList.add('show');
       });
       cell.addEventListener('mouseleave', () => tip.classList.remove('show'));
-      cell.addEventListener('click', () => {
-        tip.classList.remove('show');
-        if (window.openSystemModal) window.openSystemModal({
-          sys: d.data.__sys, loc: d.data.loc, commits: d.data.commits,
-          pct: pctStr, rank: parseInt(d.data.__sys.slice(4), 10)
-        });
+      cell.addEventListener('click', openDetail);
+      cell.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openDetail(); }
       });
 
       host.appendChild(cell);
     });
+    firstRender = false;
   };
 
   layout();
@@ -2809,6 +2815,7 @@ setInterval(updateClock, 1000);
 async function fetchLiveMetrics() {
   try {
     const res = await fetch('metrics.json?t=' + Date.now());
+    if (!res.ok) throw new Error('metrics.json HTTP ' + res.status);
     const data = await res.json();
 
     // Sidebar metrics
@@ -2826,7 +2833,8 @@ async function fetchLiveMetrics() {
       compEl.textContent = (data.totals.completionPct % 1 === 0 ? data.totals.completionPct + '' : data.totals.completionPct.toFixed(1)) + '%';
     }
     document.getElementById('hero-loc').dataset.target = data.totals.loc;
-    document.getElementById('sys-count').textContent = data.totals.repos + ' repos';
+    const activeCount = (data.repos || []).filter(r => r.loc > 0).length;
+    document.getElementById('sys-count').textContent = activeCount + ' systems';
 
     // Velocity panel — dynamic from metrics.json
     const velCenter = document.getElementById('vel-center');
@@ -2838,7 +2846,8 @@ async function fetchLiveMetrics() {
     const velStack = document.getElementById('vel-stack');
     if (velStack) {
       const stackDim = data.rarity && data.rarity.dimensions && data.rarity.dimensions.find(d => d.id === 'stack_depth');
-      if (stackDim) velStack.textContent = stackDim.label.match(/\d+/)[0] + '+';
+      const stackNum = stackDim && stackDim.label.match(/\d+/);
+      if (stackNum) velStack.textContent = stackNum[0] + '+';
     }
     const statusRepos = document.getElementById('status-repos');
     if (statusRepos) statusRepos.textContent = data.totals.repos + ' repos';
@@ -2914,14 +2923,14 @@ function populateRarity(r) {
     requestAnimationFrame(tickPRI);
   }
 
-  // Trajectory — show ACHIEVED when geo PRI exceeds target, else ETA
+  // Trajectory — always framed as a model estimate, never a measured fact
   const trajEl = document.getElementById('pri-trajectory');
   if (trajEl && r.trajectory) {
     const months = r.trajectory.projectedMonthsTo1B;
     if (months === 0 || (r.priGeoMean && r.priGeoMean >= (r.targetPRI || 1e9))) {
-      trajEl.innerHTML = 'TRAJECTORY: 1 in 1B &bull; ACHIEVED';
+      trajEl.innerHTML = 'TRAJECTORY: 1 in 1B &bull; model est.';
     } else {
-      trajEl.innerHTML = 'TRAJECTORY: 1 in 1B &bull; ETA ~' + months + 'mo';
+      trajEl.innerHTML = 'TRAJECTORY: 1 in 1B &bull; model ETA ~' + months + 'mo';
     }
   }
 
@@ -2987,22 +2996,20 @@ function populateRarity(r) {
 
 // ===== ACTIVITY FEED =====
 function generateFeed(data) {
+  // Honest snapshot list: top systems by commit count, no synthetic timestamps.
   const feed = document.getElementById('feed');
   if (!feed || !data.repos) return;
   const top = data.repos.filter(r => r.commits > 0).sort((a, b) => b.commits - a.commits).slice(0, 8);
   const lines = [];
-  const now = new Date();
   top.forEach((r, i) => {
-    const h = String(now.getHours()).padStart(2, '0');
-    const m = String(Math.max(0, now.getMinutes() - i * 3)).padStart(2, '0');
-    // Use the anonymized SYS id straight from metrics (consistent with treemap)
     const sysId = r.name || ('SYS-' + String(i + 1).padStart(2, '0'));
     lines.push('<div class="line" style="animation-delay:' + (i * 0.15) + 's">' +
-      '<span class="timestamp">' + h + ':' + m + '</span> ' +
+      '<span class="timestamp">' + r.commits.toLocaleString() + 'c</span> ' +
       '<span class="event">' + sysId + '</span> ' +
       '<span class="value">' + r.loc.toLocaleString() + ' LOC</span></div>');
   });
-  lines.push('<div class="line" style="animation-delay:' + (top.length * 0.15) + 's"><span class="timestamp">--:--</span> <span class="highlight">WM // NIGHTLY LORA CYCLE COMPLETE</span></div>');
+  const snapDate = data.generated ? data.generated.slice(0, 10) : '';
+  lines.push('<div class="line" style="animation-delay:' + (top.length * 0.15) + 's"><span class="timestamp">&mdash;</span> <span class="highlight">SNAPSHOT ' + snapDate + '</span></div>');
   feed.innerHTML = lines.join('');
 }
 
@@ -3013,7 +3020,7 @@ function animateCounter(el) {
   // exact value immediately and give it one crisp scale-in for impact.
   const target = parseFloat(el.dataset.target);
   if (target) el.textContent = Math.round(target).toLocaleString();
-  if (window.gsap) {
+  if (window.gsap && !REDUCE_MOTION) {
     gsap.fromTo(el,
       { scale: 0.92, opacity: 0 },
       { scale: 1, opacity: 1, duration: 0.9, ease: 'back.out(1.4)' }
@@ -3029,7 +3036,7 @@ const sysObs = new IntersectionObserver((entries) => {
   entries.forEach(e => {
     if (e.isIntersecting) {
       const bars = document.querySelectorAll('.system-bar-fill');
-      if (window.gsap) {
+      if (window.gsap && !REDUCE_MOTION) {
         gsap.to(bars, {
           width: (i, el) => el.dataset.width + '%',
           duration: 1.4,
@@ -3055,7 +3062,7 @@ const wmObs = new IntersectionObserver((entries) => {
       const bar = document.getElementById('wm-bar');
       const scoreEl = document.getElementById('wm-score');
 
-      if (window.gsap) {
+      if (window.gsap && !REDUCE_MOTION) {
         if (bar) {
           gsap.to(bar, { width: bar.dataset.width + '%', duration: 1.8, ease: 'expo.out', delay: 0.2 });
         }
@@ -3107,7 +3114,7 @@ const velObs = new IntersectionObserver((entries) => {
       const arc = document.getElementById('gauge-arc');
       if (arc) setTimeout(() => arc.classList.add('animated'), 300);
 
-      if (window.gsap) {
+      if (window.gsap && !REDUCE_MOTION) {
         // Stagger up the velocity sub-stats
         gsap.from('.vel-stat', {
           y: 14,
@@ -3134,7 +3141,7 @@ const velEl = document.getElementById('velocity-panel');
 if (velEl) velObs.observe(velEl);
 
 // ===== GSAP SCROLLTRIGGER PANEL REVEALS =====
-if (window.gsap && window.ScrollTrigger) {
+if (window.gsap && window.ScrollTrigger && !REDUCE_MOTION) {
   gsap.registerPlugin(ScrollTrigger);
   // Fade panels up as they enter viewport
   gsap.utils.toArray('.panel, .wintermute-section, .system-card').forEach((el) => {
@@ -3155,14 +3162,16 @@ if (window.gsap && window.ScrollTrigger) {
   if (identity) {
     gsap.from(identity, { y: 20, opacity: 0, duration: 1, ease: 'power3.out', delay: 0.2 });
   }
-  // Gold metrics shimmer (continuous)
-  gsap.to('.value.gold', {
-    filter: 'drop-shadow(0 0 6px rgba(255,221,0,0.5))',
-    duration: 2.2,
-    repeat: -1,
-    yoyo: true,
-    ease: 'sine.inOut'
-  });
+  // Metric shimmer (continuous) — skipped entirely under reduced motion
+  if (!REDUCE_MOTION) {
+    gsap.to('.value.gold', {
+      filter: 'drop-shadow(0 0 6px rgba(192,132,252,0.55))',
+      duration: 2.2,
+      repeat: -1,
+      yoyo: true,
+      ease: 'sine.inOut'
+    });
+  }
 }
 
 // Active nav
@@ -3223,30 +3232,35 @@ function heroParticleBurst() {
     setTimeout(() => p.remove(), 1500);
   }
 }
-// Trigger after counter finishes (skip if reduced-motion)
-const REDUCE_MOTION = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+// Trigger after counter finishes (skip if reduced-motion; REDUCE_MOTION declared at top of script)
 if (!REDUCE_MOTION) setTimeout(heroParticleBurst, 2700);
 
 // ===== UPGRADE 6: FROSTED GLASS PARALLAX =====
+// rAF runs ONLY while the pointer is actively moving (decays after 250ms idle)
+// — no perpetual 60fps loop on idle desktops or touch devices.
 (function() {
   if (REDUCE_MOTION) return;   // no continuous mouse-parallax for reduced-motion
   const panels = document.querySelectorAll('.panel, .wintermute-section');
-  let px = 0, py = 0;
-  document.addEventListener('mousemove', (e) => {
-    px = (e.clientX / window.innerWidth - 0.5) * 2;
-    py = (e.clientY / window.innerHeight - 0.5) * 2;
-  });
+  let px = 0, py = 0, lastMove = 0, running = false, armed = false;
+  setTimeout(() => { armed = true; }, 1200);  // wait for entrance animations
+
   function parallaxTick() {
     panels.forEach((panel, i) => {
       const depth = 1 + (i % 3) * 0.5;
-      const tx = -px * depth;
-      const ty = -py * depth;
-      panel.style.transform = 'translate(' + tx.toFixed(2) + 'px,' + ty.toFixed(2) + 'px)';
+      panel.style.transform = 'translate(' + (-px * depth).toFixed(2) + 'px,' + (-py * depth).toFixed(2) + 'px)';
     });
-    requestAnimationFrame(parallaxTick);
+    if (performance.now() - lastMove < 250) {
+      requestAnimationFrame(parallaxTick);
+    } else {
+      running = false;
+    }
   }
-  // Start after entrance animations complete
-  setTimeout(parallaxTick, 1200);
+  document.addEventListener('mousemove', (e) => {
+    px = (e.clientX / window.innerWidth - 0.5) * 2;
+    py = (e.clientY / window.innerHeight - 0.5) * 2;
+    lastMove = performance.now();
+    if (armed && !running) { running = true; requestAnimationFrame(parallaxTick); }
+  });
 })();
 
 // ===== UPGRADE 7: GAUGE NEEDLE TRAIL =====
@@ -3275,10 +3289,9 @@ if (!REDUCE_MOTION) setTimeout(heroParticleBurst, 2700);
   const origHTML = leftBar.innerHTML;
   const bootLines = [
     'SYSTEM INIT',
-    '53 repos indexed',
-    'metrics loaded',
-    'WM LOCAL ONLINE',
-    'LIVE'
+    'snapshot loaded',
+    'metrics parsed',
+    'READY'
   ];
   leftBar.innerHTML = '<span id="boot-text" style="color:var(--ice)"></span><span class="boot-cursor"></span>';
   const bootText = document.getElementById('boot-text');
@@ -3301,46 +3314,8 @@ if (!REDUCE_MOTION) setTimeout(heroParticleBurst, 2700);
   setTimeout(typeBoot, 300);
 })();
 
-// ===== UPGRADE 10: SPARKLINES IN SYSTEM CARDS =====
-function addSparklines() {
-  document.querySelectorAll('.system-card').forEach(card => {
-    if (card.querySelector('.sparkline')) return;
-    // Generate plausible ascending activity curve
-    const points = [];
-    let val = 10 + Math.random() * 20;
-    for (let i = 0; i < 12; i++) {
-      val += Math.random() * 15 - 3;
-      val = Math.max(5, Math.min(55, val));
-      points.push(val);
-    }
-    // Normalize to viewBox
-    const max = Math.max(...points);
-    const min = Math.min(...points);
-    const range = max - min || 1;
-    const coords = points.map((v, i) => {
-      const x = (i / 11) * 100;
-      const y = 16 - ((v - min) / range) * 14;
-      return x.toFixed(1) + ',' + y.toFixed(1);
-    }).join(' ');
-    // Area fill path
-    const areaCoords = coords + ' 100,16 0,16';
-    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-    svg.setAttribute('class', 'sparkline');
-    svg.setAttribute('viewBox', '0 0 100 16');
-    svg.setAttribute('preserveAspectRatio', 'none');
-    svg.innerHTML = '<polygon class="spark-area" points="' + areaCoords + '"/><polyline points="' + coords + '"/>';
-    // Insert before commits line
-    const commits = card.querySelector('.commits');
-    if (commits) card.insertBefore(svg, commits);
-    else card.appendChild(svg);
-  });
-}
-// Run after systems grid is populated
-setTimeout(addSparklines, 600);
-// Re-run after live metrics load (grid rebuilt)
-const sparkObs = new MutationObserver(() => setTimeout(addSparklines, 100));
-const sysGrid = document.getElementById('systems-grid');
-if (sysGrid) sparkObs.observe(sysGrid, { childList: true });
+// (Sparklines removed: they generated synthetic activity curves for hidden
+//  legacy cards — fabricated telemetry with no data behind it.)
 
 // ===== UPGRADE 11: NEURAL NETWORK VISUALIZATION =====
 (function() {
@@ -3599,15 +3574,28 @@ if (sysGrid) sparkObs.observe(sysGrid, { childList: true });
     titleEl.textContent = title;
     bodyEl.innerHTML = html;
     backdrop.classList.add('open');
+    document.body.style.overflow = 'hidden';           // scroll lock
     document.getElementById('bx-close').focus();
   }
   function close() {
     backdrop.classList.remove('open');
+    document.body.style.overflow = '';
     if (lastFocus && lastFocus.focus) lastFocus.focus();
   }
   backdrop.addEventListener('click', (e) => { if (e.target === backdrop) close(); });
   document.getElementById('bx-close').addEventListener('click', close);
-  document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && backdrop.classList.contains('open')) close(); });
+  document.addEventListener('keydown', (e) => {
+    if (!backdrop.classList.contains('open')) return;
+    if (e.key === 'Escape') { close(); return; }
+    // Focus trap: keep Tab inside the dialog
+    if (e.key === 'Tab') {
+      const focusables = backdrop.querySelectorAll('button, a[href], [tabindex]:not([tabindex="-1"])');
+      if (!focusables.length) return;
+      const first = focusables[0], last = focusables[focusables.length - 1];
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+    }
+  });
 
   const esc = (s) => String(s ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 
@@ -3617,12 +3605,14 @@ if (sysGrid) sparkObs.observe(sysGrid, { childList: true });
       title: 'Lines of code — how it’s measured',
       body: () =>
         '<p>Estimated from language bytes &divide; <code>40 B/line</code> across GitHub orgs plus local production and AI-agent-generated code. Includes generated code &mdash; this is a measure of <b>output shipped</b>, not hand-typed lines.</p>' +
+        '<p style="margin-top:0.6rem">Local and agent-generated buckets carry <b>no public git history</b> &mdash; the treemap marks these <code>LOCAL &middot; UNSYNCED</code> rather than showing a commit count.</p>' +
         '<p style="margin-top:0.6rem">Systems are anonymized as <code>SYS-NN</code> for confidentiality. Point-in-time snapshot' +
         (window.__methods && window.__methods.generated ? ' as of <code>' + esc(window.__methods.generated.slice(0,10)) + '</code>' : '') + '. Self-reported.</p>'
     },
     value: {
       title: 'Output value — valuation range',
-      body: () => '<p>' + esc((window.__methods && window.__methods.value) || 'Range bound by team-replication cost (low) and feature-point complexity (high).') + '</p><p style="margin-top:0.6rem">This is an <b>estimate</b>, presented as a range deliberately &mdash; point figures overstate precision.</p>'
+      body: () => '<p>' + esc((window.__methods && window.__methods.value) || 'Range bound by team-replication cost (low) and feature-point complexity (high).') + '</p>' +
+        '<p style="margin-top:0.6rem">This values the <b>output</b> at what a conventional team would cost to reproduce it &mdash; deliberately not what it cost to produce with AI leverage. It is an <b>estimate</b>, presented as a range because point figures overstate precision.</p>'
     },
     features: {
       title: 'Features shipped — counting rule',
@@ -3630,14 +3620,17 @@ if (sysGrid) sparkObs.observe(sysGrid, { childList: true });
     },
     velocity: {
       title: 'Velocity multiplier — derivation',
-      body: () => '<p>' + esc((window.__methods && window.__methods.velocity) || 'Features per year vs. industry baseline of 4.5–8.5 production features per senior engineer per year.') + '</p>'
+      body: () => '<p>' + esc((window.__methods && window.__methods.velocity) || 'Features per year vs. industry baseline of 4.5–8.5 production features per senior engineer per year.') + '</p>' +
+        (window.__methods && window.__methods.locGrowth
+          ? '<p style="margin-top:0.6rem"><b>Peak/day LOC:</b> ' + esc(window.__methods.locGrowth) + ' The 10-year average is far lower; the peak figure describes the current AI-leveraged phase only.</p>'
+          : '')
     },
     rarity: {
       title: 'Profile Rarity Index — the model',
       body: () =>
         '<p><code>' + esc((window.__methods && window.__methods.pri) || 'PRI = 1 / (∏Pi × κ × N)') + '</code></p>' +
         '<p style="margin-top:0.6rem">Escape velocity: <code>' + esc((window.__methods && window.__methods.evi) || 'log-scale position of geometric-mean PRI') + '</code></p>' +
-        '<p style="margin-top:0.6rem">Correlation factors <code>&kappa;</code> are estimates; PRI is a <b>directional model, not a measurement</b>. The dimension probabilities and their sources are listed under &ldquo;View Dimensions.&rdquo;</p>'
+        '<p style="margin-top:0.6rem">Both the dimension probabilities and the correlation factors <code>&kappa;</code> are <b>own estimates</b>, informed by the public baselines named per dimension &mdash; no organization publishes per-individual probabilities. PRI is a <b>directional model, not a measurement</b>; treat it as a structured way of saying &ldquo;this combination is unusual,&rdquo; not as a statistic.</p>'
     }
   };
 
@@ -3651,12 +3644,18 @@ if (sysGrid) sparkObs.observe(sysGrid, { childList: true });
 
   // --- System detail (treemap click) ---
   window.openSystemModal = function (s) {
-    const total = window.__totalLoc || 0;
+    const commitsRow = s.localOnly
+      ? '<div class="bx-row"><span>Git history</span><b>Local &middot; unsynced</b></div>'
+      : '<div class="bx-row"><span>Commits</span><b>' + s.commits.toLocaleString() + '</b></div>';
+    const localNote = s.localOnly
+      ? '<p style="margin-top:0.8rem">This bucket aggregates local production and AI-agent-generated code that does not live in a public repository, so no commit history is available.</p>'
+      : '';
     open('PRODUCTION SYSTEM', s.sys,
       '<div class="bx-row"><span>Lines of code</span><b>' + s.loc.toLocaleString() + '</b></div>' +
       '<div class="bx-row"><span>Share of portfolio</span><b>' + esc(s.pct) + '</b></div>' +
-      '<div class="bx-row"><span>Commits</span><b>' + s.commits.toLocaleString() + '</b></div>' +
+      commitsRow +
       '<div class="bx-row"><span>Size rank</span><b>#' + s.rank + ' of portfolio</b></div>' +
+      localNote +
       '<p style="margin-top:0.8rem">Identity withheld &mdash; production systems are anonymized for client and IP confidentiality. Specifics available under NDA.</p>'
     );
   };
@@ -3690,24 +3689,53 @@ if (sysGrid) sparkObs.observe(sysGrid, { childList: true });
     if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(v);
   }
 
+  // Combobox ARIA wiring so arrow-key selection is announced by screen readers
+  input.setAttribute('role', 'combobox');
+  input.setAttribute('aria-expanded', 'false');
+  input.setAttribute('aria-controls', 'ck-list');
+  input.setAttribute('aria-autocomplete', 'list');
+
+  let lastFocusCK = null;
+
   function render() {
     const q = input.value.trim().toLowerCase();
     filtered = ACTIONS.filter(a => !q || a.label.toLowerCase().includes(q));
     if (idx >= filtered.length) idx = Math.max(0, filtered.length - 1);
     list.innerHTML = filtered.map((a, i) =>
-      '<div class="ck-item' + (i === idx ? ' active' : '') + '" data-i="' + i + '" role="option"' + (i === idx ? ' aria-selected="true"' : '') + '>' +
+      '<div class="ck-item' + (i === idx ? ' active' : '') + '" id="ck-opt-' + i + '" data-i="' + i + '" role="option" aria-selected="' + (i === idx) + '">' +
       '<span>' + a.label + '</span><span class="ck-tag">' + a.tag + '</span></div>'
-    ).join('') || '<div class="ck-item">No matches</div>';
+    ).join('') || '<div class="ck-item" role="presentation">No matches</div>';
+    input.setAttribute('aria-activedescendant', filtered.length ? 'ck-opt-' + idx : '');
   }
 
-  function openPalette() { backdrop.classList.add('open'); input.value = ''; idx = 0; render(); setTimeout(() => input.focus(), 30); }
-  function closePalette() { backdrop.classList.remove('open'); }
-  function runActive() { const a = filtered[idx]; if (a) { closePalette(); a.run(); } }
+  function openPalette() {
+    lastFocusCK = document.activeElement;
+    backdrop.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    input.setAttribute('aria-expanded', 'true');
+    input.value = ''; idx = 0; render();
+    setTimeout(() => input.focus(), 30);
+  }
+  function closePalette() {
+    backdrop.classList.remove('open');
+    document.body.style.overflow = '';
+    input.setAttribute('aria-expanded', 'false');
+    if (lastFocusCK && lastFocusCK.focus) lastFocusCK.focus();
+  }
+  function runActive() {
+    const a = filtered[idx];
+    if (a) {
+      // Run BEFORE closing so modal-opening actions capture the true prior focus
+      closePalette();
+      a.run();
+    }
+  }
 
   document.addEventListener('keydown', (e) => {
     if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') { e.preventDefault(); backdrop.classList.contains('open') ? closePalette() : openPalette(); return; }
     if (!backdrop.classList.contains('open')) return;
     if (e.key === 'Escape') { closePalette(); }
+    else if (e.key === 'Tab') { e.preventDefault(); input.focus(); }  // trap: input is the only focusable
     else if (e.key === 'ArrowDown') { e.preventDefault(); idx = Math.min(idx + 1, filtered.length - 1); render(); }
     else if (e.key === 'ArrowUp') { e.preventDefault(); idx = Math.max(idx - 1, 0); render(); }
     else if (e.key === 'Enter') { e.preventDefault(); runActive(); }

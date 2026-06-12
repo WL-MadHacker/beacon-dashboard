@@ -6,8 +6,9 @@
     "WayLucid-Org"
   ],
   "totals": {
-    "repos": 53,
-    "uniqueProjects": 77,
+    "repos": 50,
+    "activeSystems": 45,
+    "uniqueProjects": 45,
     "loc": 4271528,
     "bytes": 170861120,
     "commits": 23477,
@@ -26,7 +27,8 @@
       "name": "SYS-01",
       "bytes": 67396080,
       "loc": 1684902,
-      "commits": 0
+      "commits": 0,
+      "localOnly": true
     },
     {
       "name": "SYS-02",
@@ -38,7 +40,8 @@
       "name": "SYS-03",
       "bytes": 24496320,
       "loc": 612408,
-      "commits": 0
+      "commits": 0,
+      "localOnly": true
     },
     {
       "name": "SYS-04",
@@ -272,7 +275,8 @@
       "name": "SYS-42",
       "bytes": 12480,
       "loc": 312,
-      "commits": 0
+      "commits": 0,
+      "localOnly": true
     },
     {
       "name": "SYS-43",
@@ -344,7 +348,7 @@
         "label": "Solo Operator >4.3M LOC",
         "p": 2e-05,
         "rarity": 50000,
-        "source": "GitHub Octoverse + COCOMO II",
+        "source": "Own estimate, informed by GitHub Octoverse activity data",
         "tier": "output",
         "timeLocked": false
       },
@@ -353,16 +357,16 @@
         "label": "25-48x Dev Velocity",
         "p": 0.004,
         "rarity": 250,
-        "source": "DORA State of DevOps + ProductPlan",
+        "source": "Own estimate vs. ProductPlan feature-delivery baselines",
         "tier": "output",
         "timeLocked": false
       },
       {
         "id": "repos",
-        "label": "77+ Unique Production Projects",
+        "label": "45+ Production Systems Maintained Solo",
         "p": 0.006,
         "rarity": 167,
-        "source": "GitHub Developer Survey",
+        "source": "Own estimate vs. GitHub Developer Survey activity data",
         "tier": "output",
         "timeLocked": false
       },
@@ -371,7 +375,7 @@
         "label": "2,147+ Features Shipped Solo",
         "p": 0.00028,
         "rarity": 3571,
-        "source": "ProductPlan Industry Benchmark",
+        "source": "Self-reported count; rarity own estimate",
         "tier": "output",
         "timeLocked": false
       },
@@ -380,7 +384,7 @@
         "label": "27+ Tech Stack Depth",
         "p": 0.018,
         "rarity": 56,
-        "source": "StackOverflow Developer Survey",
+        "source": "Own estimate vs. StackOverflow Developer Survey",
         "tier": "output",
         "timeLocked": false
       },
@@ -389,7 +393,7 @@
         "label": "Self-Employed Founder (No Ceiling)",
         "p": 0.08,
         "rarity": 12,
-        "source": "BLS / Statista Developer Employment",
+        "source": "BLS / Statista self-employment share among developers",
         "tier": "structural",
         "timeLocked": false
       },
@@ -398,7 +402,7 @@
         "label": "~10yr Sustained Startup Tenure",
         "p": 0.05,
         "rarity": 20,
-        "source": "Kauffman Foundation Startup Survival",
+        "source": "Kauffman Foundation startup survival curves",
         "tier": "structural",
         "timeLocked": true
       },
@@ -407,7 +411,7 @@
         "label": "AI-Native + Agent Orchestration (>85%)",
         "p": 0.014,
         "rarity": 71,
-        "source": "GitHub Copilot + JetBrains Survey",
+        "source": "Own estimate vs. JetBrains / GitHub AI-usage surveys",
         "tier": "structural",
         "timeLocked": false
       },
@@ -416,7 +420,7 @@
         "label": "Custom Local LLM in Production",
         "p": 0.0001,
         "rarity": 10000,
-        "source": "HuggingFace Model Census",
+        "source": "Own estimate",
         "tier": "rare",
         "timeLocked": false
       },
@@ -425,16 +429,16 @@
         "label": "BCI/Neurotech Research Depth",
         "p": 0.0005,
         "rarity": 2000,
-        "source": "IEEE / BCI Society Membership",
+        "source": "Own estimate, informed by BCI research community scale",
         "tier": "rare",
         "timeLocked": true
       },
       {
         "id": "benchmarks",
-        "label": "Published AI Benchmark Results",
+        "label": "Open AI Artifacts Published",
         "p": 0.005,
         "rarity": 200,
-        "source": "Papers With Code / HuggingFace",
+        "source": "Self-reported (HuggingFace profile)",
         "tier": "rare",
         "timeLocked": false
       }
